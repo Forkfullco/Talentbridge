@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
 
 export function Footer() {
@@ -6,15 +7,20 @@ export function Footer() {
       <div className="mx-auto max-w-[1080px] px-5 pt-10 md:flex md:items-start md:justify-between md:gap-12 md:px-8">
         <div>
           <Logo size={32} />
-          <p className="mt-5 max-w-[620px] text-[15px] leading-[1.6] text-muted">
-            TalentBridge is independent and is not affiliated with or employed by the hiring company. We may receive a fee if
-            you are hired.
-          </p>
         </div>
-        <nav aria-label="Legal" className="mt-6 md:mt-1">
-          <a href="#privacy" className="text-[15px] font-medium text-ink underline underline-offset-4 hover:text-soft">
+        <nav aria-label="Legal" className="mt-6 flex flex-wrap gap-x-6 gap-y-2 md:mt-1">
+          <Link
+            to="/privacy"
+            className="text-[15px] font-medium text-ink underline underline-offset-4 hover:text-soft"
+          >
             Privacy Policy
-          </a>
+          </Link>
+          <Link
+            to="/terms"
+            className="text-[15px] font-medium text-ink underline underline-offset-4 hover:text-soft"
+          >
+            Terms &amp; Conditions
+          </Link>
         </nav>
       </div>
     </footer>
