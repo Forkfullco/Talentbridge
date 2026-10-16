@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { LegalLayout } from "./LegalLayout";
 
-const UPDATED = "October 16, 2026";
+const UPDATED = "October 16, 2026"; // GA + Meta analytics disclosed
 
 export function PrivacyPage() {
   useEffect(() => {
@@ -28,7 +28,8 @@ export function PrivacyPage() {
         </li>
         <li>
           <span className="font-medium text-ink">Cookies and similar technologies.</span> We use cookies, pixels,
-          and similar tools for site function, analytics, and advertising measurement. See “Meta Pixel” below.
+          and similar tools for site function, analytics, and advertising measurement. See “Google Analytics”
+          and “Meta Pixel” below.
         </li>
         <li>
           <span className="font-medium text-ink">Information you choose to share.</span> The Site itself does not
@@ -41,10 +42,28 @@ export function PrivacyPage() {
       <p>We use information to:</p>
       <ul className="list-disc space-y-2 pl-5">
         <li>Operate, secure, and improve the Site</li>
-        <li>Measure traffic, engagement, and campaign performance (including Meta ads)</li>
+        <li>Measure traffic, engagement, and campaign performance (including Google Analytics and Meta ads)</li>
         <li>Understand whether visitors click Apply and related conversion events</li>
         <li>Comply with law and enforce our Terms</li>
       </ul>
+
+      <h2 className="font-serif text-[24px] font-medium text-ink">Google Analytics</h2>
+      <p>
+        We use Google Analytics (gtag.js, measurement ID G-CW1HP8BX8B) to understand how visitors use the Site
+        (for example pages viewed, sessions, and approximate geography). Google may process this data under{" "}
+        <a
+          href="https://policies.google.com/privacy"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium text-ink underline underline-offset-4"
+        >
+          Google’s Privacy Policy
+        </a>
+        . When you click Apply we may also send a{" "}
+        <span className="font-medium text-ink">generate_lead</span> event to Google Analytics for conversion
+        measurement. You can limit Google Analytics via browser controls or Google’s opt-out tools where
+        available.
+      </p>
 
       <h2 className="font-serif text-[24px] font-medium text-ink">Meta Pixel and advertising</h2>
       <p>
@@ -73,9 +92,9 @@ export function PrivacyPage() {
       <h2 className="font-serif text-[24px] font-medium text-ink">Sharing</h2>
       <p>
         We may share limited data with service providers who help us host the Site (such as Cloudflare), run
-        analytics or ads (such as Meta), or operate our business—under appropriate confidentiality
-        obligations. We may also disclose information if required by law or to protect rights and safety. We
-        do not sell your personal information for money.
+        analytics or ads (such as Google Analytics and Meta), or operate our business—under appropriate
+        confidentiality obligations. We may also disclose information if required by law or to protect rights
+        and safety. We do not sell your personal information for money.
       </p>
 
       <h2 className="font-serif text-[24px] font-medium text-ink">Retention &amp; security</h2>

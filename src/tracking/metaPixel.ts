@@ -1,14 +1,17 @@
 /**
- * META PIXEL
+ * META PIXEL + GA helpers
  * ------------------------------------------------------------------
- * Base snippet also lives in index.html <head> (fbq init + PageView +
- * noscript) so it loads before React. This module shares PIXEL_ID and
- * fires Lead on Apply clicks via trackLead().
+ * Base snippets live in index.html <head> (gtag + fbq init / PageView /
+ * noscript) so they load before React. This module fires Lead events on
+ * Apply clicks via trackLead().
  */
 export const PIXEL_ID = "1685542169905756";
+export const GA_MEASUREMENT_ID = "G-CW1HP8BX8B";
 
 declare global {
   interface Window {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
     fbq?: ((...args: unknown[]) => void) & {
       callMethod?: (...args: unknown[]) => void;
       queue?: unknown[];
@@ -20,10 +23,15 @@ declare global {
   }
 }
 
-/** Fire the Lead event. Call synchronously in the click handler, before navigation. */
+/** Fire Lead / generate_lead. Call synchronously in the click handler, before navigation. */
 export function trackLead() {
   try {
     window.fbq?.("track", "Lead");
+  } catch {
+    /* never block the outbound click */
+  }
+  try {
+    window.gtag?.("event", "generate_lead", { send_to: GA_MEASUREMENT_ID });
   } catch {
     /* never block the outbound click */
   }
