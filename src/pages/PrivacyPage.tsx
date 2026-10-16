@@ -28,8 +28,8 @@ export function PrivacyPage() {
         </li>
         <li>
           <span className="font-medium text-ink">Cookies and similar technologies.</span> We use cookies, pixels,
-          and similar tools for site function, analytics, and advertising measurement. See “Google Analytics”
-          and “Meta Pixel” below.
+          and similar tools for site function, analytics, and advertising measurement. See “Google Analytics,”
+          “Microsoft Clarity,” and “Meta Pixel” below.
         </li>
         <li>
           <span className="font-medium text-ink">Information you choose to share.</span> The Site itself does not
@@ -42,7 +42,10 @@ export function PrivacyPage() {
       <p>We use information to:</p>
       <ul className="list-disc space-y-2 pl-5">
         <li>Operate, secure, and improve the Site</li>
-        <li>Measure traffic, engagement, and campaign performance (including Google Analytics and Meta ads)</li>
+        <li>
+          Measure traffic, engagement, and campaign performance (including Google Analytics, Microsoft Clarity,
+          and Meta ads)
+        </li>
         <li>Understand whether visitors click Apply and related conversion events</li>
         <li>Comply with law and enforce our Terms</li>
       </ul>
@@ -63,6 +66,22 @@ export function PrivacyPage() {
         <span className="font-medium text-ink">generate_lead</span> event to Google Analytics for conversion
         measurement. You can limit Google Analytics via browser controls or Google’s opt-out tools where
         available.
+      </p>
+
+      <h2 className="font-serif text-[24px] font-medium text-ink">Microsoft Clarity</h2>
+      <p>
+        We use Microsoft Clarity (project ID yysg03c2b0) to understand how visitors interact with the Site,
+        including session recordings, heatmaps, and aggregated usage metrics. Clarity may collect device and
+        interaction data and process it under{" "}
+        <a
+          href="https://privacy.microsoft.com/privacystatement"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium text-ink underline underline-offset-4"
+        >
+          Microsoft’s Privacy Statement
+        </a>
+        . You can limit this via browser controls or Clarity/Microsoft privacy settings where available.
       </p>
 
       <h2 className="font-serif text-[24px] font-medium text-ink">Meta Pixel and advertising</h2>
@@ -92,9 +111,9 @@ export function PrivacyPage() {
       <h2 className="font-serif text-[24px] font-medium text-ink">Sharing</h2>
       <p>
         We may share limited data with service providers who help us host the Site (such as Cloudflare), run
-        analytics or ads (such as Google Analytics and Meta), or operate our business—under appropriate
-        confidentiality obligations. We may also disclose information if required by law or to protect rights
-        and safety. We do not sell your personal information for money.
+        analytics or ads (such as Google Analytics, Microsoft Clarity, and Meta), or operate our business—under
+        appropriate confidentiality obligations. We may also disclose information if required by law or to
+        protect rights and safety. We do not sell your personal information for money.
       </p>
 
       <h2 className="font-serif text-[24px] font-medium text-ink">Retention &amp; security</h2>
