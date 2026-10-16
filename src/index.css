@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* Paper + ink, like the Grepped and Tracework sites, with the logo's lime as the one bright accent */
+  --color-paper: #f5f3ec;
+  --color-paper-2: #ebe8dd;
+  --color-card: #ffffff;
+  --color-ink: #121212;
+  --color-ink-2: #1f1f1d;
+  --color-soft: #3d3d39;
+  --color-muted: #66655e;
+  --color-line: #dcd8cb;
+  --color-line-dark: #34342f;
+  --color-lime: #d6f35b;
+  --color-lime-hover: #c6e544;
+
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Newsreader", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+html, body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ticker band */
+.ticker-track { animation: ticker 40s linear infinite; }
+@keyframes ticker { to { transform: translateX(-50%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .ticker-track { animation: none; }
+}
+
+:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
