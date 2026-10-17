@@ -1,4 +1,4 @@
-import { applyOutcome, appsScriptConfigured, callAppsScript, CORS_HEADERS, json, validEmail } from "../lib.js";
+import { applyOutcome, CORS_HEADERS, json, utmValue, validEmail } from "../lib.js";
 
 export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: CORS_HEADERS });
@@ -13,12 +13,12 @@ export async function onRequestPost(context) {
     return json({ ok: false, error: "Invalid JSON" }, 400);
   }
 
-  const firstName = String(body.firstName || "").trim();
-  const email = String(body.email || "").trim().toLowerCase();
-  const phone = String(body.phone || "").trim();
+  const firstName = String(body.firstName || "").trim().slice(0, 120);
+  const email = String(body.email || "").trim().toLowerCase().slice(0, 200);
+  const phone = String(body.phone || "").trim().slice(0, 40);
   const licensed = body.licensed === "yes" || body.licensed === "no" ? body.licensed : "";
   const bedside = body.bedside === "yes" || body.bedside === "no" ? body.bedside : "";
-  const state = String(body.state || "").trim();
+  const state = String(body.state || "").trim().slice(0, 80);
   const desktop = body.desktop === "yes" || body.desktop === "no" ? body.desktop : "";
   const consent = body.consent === true;
 
@@ -28,46 +28,55 @@ export async function onRequestPost(context) {
   if (!bedside) return json({ ok: false, error: "Choose Yes or No for bedside experience." }, 400);
   if (!desktop) return json({ ok: false, error: "Choose Yes or No for laptop/desktop." }, 400);
   if (!consent) return json({ ok: false, error: "Please agree to continue." }, 400);
+  if (!env.DB) return json({ ok: false, error: "Lead storage is not configured." }, 500);
 
   const outcome = applyOutcome(licensed, bedside, desktop);
-  const utm = body.utm && typeof body.utm === "object" ? body.utm : {};
-  const lead = {
-    timestamp: new Date().toISOString(),
-    firstName,
-    email,
-    phone,
-    licensed,
-    bedside,
-    state,
-    desktop,
-    consent,
-    utm,
-    outcome,
-  };
+  const qualified = outcome !== "not_qualified";
+  const now = new Date();
+  const token = crypto.randomUUID().replace(/-/g, "");
+  const hour = 60 * 60 * 1000;
+  const emailStatus = qualified ? "needs_provider" : "";
 
-  if (env.APPS_SCRIPT_URL) {
-    try {
-      const data = await callAppsScript(env, { action: "apply", ...lead });
-      return json({
-        ok: true,
-        outcome,
-        emailSent: Boolean(data.emailSent),
-      });
-    } catch {
-      return json({ ok: false, error: "Could not save your application. Please try again." }, 502);
-    }
-  }
-
-  if (env.LEADS) {
-    const id = `${Date.now()}-${crypto.randomUUID()}`;
-    await env.LEADS.put(`lead:${id}`, JSON.stringify(lead));
-    return json({ ok: true, outcome, emailSent: false, queued: true });
+  try {
+    await env.DB.prepare(
+      `INSERT INTO leads (
+        timestamp, first_name, email, phone, licensed, bedside, state, desktop, consent,
+        utm_source, utm_medium, utm_campaign, utm_content, utm_term,
+        status, applied_token, email_status, email1_due, email2_due, email3_due, stopped
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    )
+      .bind(
+        now.toISOString(),
+        firstName,
+        email,
+        phone,
+        licensed,
+        bedside,
+        state,
+        desktop,
+        "yes",
+        utmValue(body.utm, "utm_source"),
+        utmValue(body.utm, "utm_medium"),
+        utmValue(body.utm, "utm_campaign"),
+        utmValue(body.utm, "utm_content"),
+        utmValue(body.utm, "utm_term"),
+        qualified ? "New" : "Not qualified",
+        token,
+        emailStatus,
+        qualified ? now.toISOString() : "",
+        qualified ? new Date(now.getTime() + 24 * hour).toISOString() : "",
+        qualified ? new Date(now.getTime() + 72 * hour).toISOString() : "",
+        "",
+      )
+      .run();
+  } catch {
+    return json({ ok: false, error: "Could not save your application. Please try again." }, 500);
   }
 
   return json({
     ok: true,
     outcome,
     emailSent: false,
-    stored: false,
+    stored: true,
   });
 }

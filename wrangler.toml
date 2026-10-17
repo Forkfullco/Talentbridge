@@ -5,6 +5,10 @@ pages_build_output_dir = "dist"
 [vars]
 SITE_URL = "https://talentbridge-4pb.pages.dev"
 
-# Secrets (set with wrangler pages secret):
-#   APPLY_SECRET       shared with Apps Script
-#   APPS_SCRIPT_URL    Google Apps Script web app URL
+# Secret (wrangler pages secret put APPLY_SECRET):
+#   APPLY_SECRET   required to open GET /api/leads
+
+[[d1_databases]]
+binding = "DB"
+database_name = "talentbridge-leads"
+database_id = "e895b9fe-6a16-4a7c-bebe-6768e318edf8"

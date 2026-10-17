@@ -102,9 +102,7 @@ export function ApplyForm() {
   const title = submitted
     ? submitted === "not_qualified"
       ? "Thanks for reaching out"
-      : submitted === "qualified_mobile"
-        ? "Check your email"
-        : "Your application link"
+      : "Your application link"
     : "Quick check before you apply";
 
   return (
@@ -311,19 +309,34 @@ function Success({ firstName, outcome }: { firstName: string; outcome: ApplyOutc
     return (
       <div className="px-6 pb-8 pt-6 sm:px-8">
         <p className="text-[17px] leading-relaxed text-soft">
-          Thanks, {name}. We’ve emailed you the link so you can apply from your laptop later.
+          Thanks, {name}. The application and AI interview work best on a laptop. Open the link below there
+          when you can.
         </p>
-        <p className="mt-5 border-l-2 border-ink pl-4 text-[15px] leading-relaxed text-soft">
-          The application and AI interview work best in Chrome on a laptop or desktop with camera and mic.
-          Plan for up to about 50 minutes.
-        </p>
-        <button
-          type="button"
+        <ul className="mt-5 space-y-2.5 text-[15px] leading-relaxed text-soft">
+          <li className="flex gap-2">
+            <Check size={18} className="mt-0.5 shrink-0" strokeWidth={2.5} aria-hidden />
+            Create a new micro1 account with this same email
+          </li>
+          <li className="flex gap-2">
+            <Check size={18} className="mt-0.5 shrink-0" strokeWidth={2.5} aria-hidden />
+            AI interview takes up to about 50 minutes
+          </li>
+          <li className="flex gap-2">
+            <Check size={18} className="mt-0.5 shrink-0" strokeWidth={2.5} aria-hidden />
+            Use Chrome on a laptop with camera and microphone
+          </li>
+        </ul>
+        <a
+          href={APPLY_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           onClick={closeApplyForm}
-          className="mt-7 inline-flex min-h-[56px] w-full items-center justify-center rounded-full bg-lime px-8 text-[18px] font-semibold text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-lime-hover"
+          className="mt-7 inline-flex min-h-[56px] w-full items-center justify-center gap-2 rounded-full bg-lime px-8 text-[18px] font-semibold text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-lime-hover active:translate-y-px"
         >
-          Done
-        </button>
+          Start your micro1 application
+          <ArrowUpRight size={20} strokeWidth={2.5} aria-hidden />
+          <span className="sr-only">(opens in a new tab)</span>
+        </a>
       </div>
     );
   }

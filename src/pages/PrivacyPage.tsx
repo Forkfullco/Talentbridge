@@ -36,7 +36,8 @@ export function PrivacyPage() {
           <span className="font-medium text-ink">Information you choose to share.</span> If you submit the Apply
           form we collect your first name, email, optional phone number, RN license and bedside-experience
           answers, optional state of licensure, whether you are on a laptop/desktop, email-consent, and campaign
-          tags (UTM parameters) from the link you used. That record is stored in a Google Sheet we control.
+          tags (UTM parameters) from the link you used. That record is stored in a Cloudflare D1 database we
+          control.
         </li>
       </ul>
 
@@ -106,21 +107,22 @@ export function PrivacyPage() {
         . You can control ad preferences in your Meta account and through browser or device settings.
       </p>
 
-      <h2 className="font-serif text-[24px] font-medium text-ink">Google Sheets, email follow-ups, and Pixel Lead</h2>
+      <h2 className="font-serif text-[24px] font-medium text-ink">Lead records, email follow-ups, and Pixel Lead</h2>
       <p>
-        Form submissions are stored in Google Sheets (Google may process that data under{" "}
+        Form submissions are stored in Cloudflare D1 (database name talentbridge-leads), hosted by Cloudflare
+        under{" "}
         <a
-          href="https://policies.google.com/privacy"
+          href="https://www.cloudflare.com/privacypolicy/"
           target="_blank"
           rel="noopener noreferrer"
           className="font-medium text-ink underline underline-offset-4"
         >
-          Google’s Privacy Policy
+          Cloudflare’s Privacy Policy
         </a>
-        ). If you qualify, we use Gmail (via Google Apps Script) to send an immediate application link and up
-        to two reminders (about 24 hours and 3 days later). Each of those emails includes an “I’ve applied”
-        link that updates your Sheet status to Applied and stops further reminders. Unqualified submissions are
-        stored with status “Not qualified” and are not sent the micro1 application link. A Meta Pixel{" "}
+        . Qualified leads are marked for an email sequence (immediate, about 24 hours, and about 3 days). Those
+        messages are not sent until an email provider is connected. Each planned email includes an “I’ve
+        applied” link that sets status to Applied and stops further reminders. Unqualified submissions are
+        stored with status “Not qualified” and are not given the micro1 application as a fit. A Meta Pixel{" "}
         <span className="font-medium text-ink">Lead</span> event and a Google Analytics{" "}
         <span className="font-medium text-ink">generate_lead</span> event fire after a successful form save.
       </p>
@@ -135,9 +137,9 @@ export function PrivacyPage() {
 
       <h2 className="font-serif text-[24px] font-medium text-ink">Sharing</h2>
       <p>
-        We may share limited data with service providers who help us host the Site (such as Cloudflare), store
-        form records and send follow-up email (Google Sheets and Gmail), run analytics or ads (such as Google
-        Analytics, Microsoft Clarity, and Meta), or operate our business—under appropriate confidentiality
+        We may share limited data with service providers who help us host the Site and store form records
+        (Cloudflare, including D1), send follow-up email once a provider is connected, run analytics or ads
+        (such as Google Analytics, Microsoft Clarity, and Meta), or operate our business—under appropriate confidentiality
         obligations. We may also disclose information if required by law or to protect rights and safety. We
         do not sell your personal information for money.
       </p>

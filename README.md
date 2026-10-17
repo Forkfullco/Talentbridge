@@ -1,12 +1,12 @@
 # TalentBridge
 
-Landing page for the remote RN / AI-training role. Apply opens a pre-qualification modal; leads go to a Google Sheet and qualified applicants get a Gmail sequence.
+Landing page for the remote RN / AI-training role. Apply opens a pre-qualification modal. Leads are stored in Cloudflare D1 (`talentbridge-leads`). Email reminders are scheduled on the row (`email_status = needs_provider`) and are not sent until a provider such as Resend or Brevo is connected.
 
 ## Live
 
 - Site: https://talentbridge-4pb.pages.dev/ (custom domain: talentbridgeremote.com)
 - Cloudflare Pages project: `talentbridge`
-- Leads sheet: https://docs.google.com/spreadsheets/d/1hy0KYNqXzk3nwBDJq5YsuEomNCQb4bCdPNGoujA_Mec/edit
+- Leads: `GET /api/leads?secret=APPLY_SECRET` (HTML, or `&format=json` / `&format=csv`)
 
 ## Local
 
@@ -15,7 +15,7 @@ npm install
 npm run dev    # http://127.0.0.1:18741/
 ```
 
-Local `/api/apply` is a Vite middleware so the form is previewable. It only writes the Google Sheet / sends email when `APPS_SCRIPT_URL` and `APPLY_SECRET` are set in the environment.
+Local `/api/apply` is a Vite middleware so the form is previewable. Production writes D1.
 
 ## Production deploy
 
@@ -23,12 +23,19 @@ Local `/api/apply` is a Vite middleware so the form is previewable. It only writ
 npm run build
 npx wrangler pages deploy dist --project-name=talentbridge --branch=main
 npx wrangler pages secret put APPLY_SECRET --project-name=talentbridge
-npx wrangler pages secret put APPS_SCRIPT_URL --project-name=talentbridge
+npx wrangler d1 execute talentbridge-leads --remote --file=d1/schema.sql
 ```
 
-Worker/Pages routes:
+View leads:
 
-- `POST /api/apply` — save lead, fire email 1 if qualified
-- `GET|POST /api/applied` — mark Sheet status `Applied` and stop reminders (`?t=` or JSON `{ token }`)
+```bash
+npx wrangler d1 execute talentbridge-leads --remote --command "SELECT id, timestamp, first_name, email, status, email_status FROM leads ORDER BY id DESC"
+```
 
-Google Apps Script (Gmail + Sheet + hourly reminders): see [`apps-script/README.md`](apps-script/README.md). Unqualified (RN = No **or** inpatient/bedside = No) is stored as `Not qualified` and never shown the micro1 CTA.
+Routes:
+
+- `POST /api/apply` — insert the lead into D1 (`stored: true`). No email is sent.
+- `GET|POST /api/applied` — set status `Applied` and stop the scheduled sequence (`?t=` or JSON `{ token }`)
+- `GET /api/leads?secret=` — HTML table; add `format=json` or `format=csv`
+
+Unqualified (RN = No **or** inpatient/bedside = No) is stored as `Not qualified` and is not shown the micro1 CTA. Qualified applicants on a phone still get the micro1 link on screen.

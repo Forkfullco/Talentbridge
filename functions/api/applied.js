@@ -1,4 +1,4 @@
-import { appsScriptConfigured, callAppsScript, CORS_HEADERS, json } from "../lib.js";
+import { CORS_HEADERS, json } from "../lib.js";
 
 export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: CORS_HEADERS });
@@ -7,14 +7,25 @@ export async function onRequestOptions() {
 async function markApplied(env, token) {
   const value = String(token || "").trim();
   if (!value) return json({ ok: false, error: "Missing token" }, 400);
-  if (!appsScriptConfigured(env)) {
-    return json({ ok: true, already: false, queued: true });
-  }
+  if (!env.DB) return json({ ok: false, error: "Lead storage is not configured." }, 500);
   try {
-    const data = await callAppsScript(env, { action: "applied", token: value });
-    return json({ ok: true, already: Boolean(data.already) });
+    const row = await env.DB.prepare(
+      "SELECT status, stopped FROM leads WHERE applied_token = ?",
+    )
+      .bind(value)
+      .first();
+    if (!row) return json({ ok: false, error: "Could not update your status. The link may have expired." }, 404);
+    if (row.status === "Applied" || row.stopped === "yes") {
+      return json({ ok: true, already: true });
+    }
+    await env.DB.prepare(
+      "UPDATE leads SET status = 'Applied', stopped = 'yes', email_status = 'stopped' WHERE applied_token = ?",
+    )
+      .bind(value)
+      .run();
+    return json({ ok: true, already: false });
   } catch {
-    return json({ ok: false, error: "Could not update your status. The link may have expired." }, 502);
+    return json({ ok: false, error: "Could not update your status. The link may have expired." }, 500);
   }
 }
 
