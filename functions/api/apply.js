@@ -1,4 +1,5 @@
 import { applyOutcome, CORS_HEADERS, json, utmValue, validEmail } from "../lib.js";
+import { sendLeadEmail } from "../mail.js";
 
 export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: CORS_HEADERS });
@@ -73,10 +74,33 @@ export async function onRequestPost(context) {
     return json({ ok: false, error: "Could not save your application. Please try again." }, 500);
   }
 
+  const row = await env.DB.prepare("SELECT id FROM leads WHERE applied_token = ?").bind(token).first();
+  let emailSent = false;
+  let emailStatusFinal = emailStatus;
+  if (qualified) {
+    const sent = await sendLeadEmail(env, 1, {
+      first_name: firstName,
+      email,
+      applied_token: token,
+    });
+    emailSent = sent.ok;
+    emailStatusFinal = sent.ok ? "sent_1" : env.RESEND_API_KEY ? "send_failed" : "needs_provider";
+  } else {
+    const sent = await sendLeadEmail(env, "not_fit", {
+      first_name: firstName,
+      email,
+      applied_token: token,
+    });
+    emailStatusFinal = sent.ok ? "not_fit_sent" : "";
+  }
+  if (row && emailStatusFinal !== emailStatus) {
+    await env.DB.prepare("UPDATE leads SET email_status = ? WHERE id = ?").bind(emailStatusFinal, row.id).run();
+  }
+
   return json({
     ok: true,
     outcome,
-    emailSent: false,
+    emailSent,
     stored: true,
   });
 }

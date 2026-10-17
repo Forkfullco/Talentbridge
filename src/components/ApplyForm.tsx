@@ -17,6 +17,7 @@ export function ApplyForm() {
   const [form, setForm] = useState<FormState>(EMPTY);
   const [errors, setErrors] = useState<Errors>({});
   const [submitted, setSubmitted] = useState<ApplyOutcome | null>(null);
+  const [emailSent, setEmailSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const firstRef = useRef<HTMLInputElement>(null);
@@ -44,6 +45,7 @@ export function ApplyForm() {
         setErrors({});
         setSubmitError(null);
         setSending(false);
+        setEmailSent(false);
       }, 250);
       return () => window.clearTimeout(t);
     }
@@ -82,7 +84,7 @@ export function ApplyForm() {
         }),
       });
       const data = (await res.json().catch(() => null)) as
-        | { ok?: boolean; outcome?: ApplyOutcome; error?: string }
+        | { ok?: boolean; outcome?: ApplyOutcome; emailSent?: boolean; error?: string }
         | null;
       if (!res.ok || !data?.ok) {
         setSubmitError(data?.error || "Could not save your application. Please try again.");
@@ -91,6 +93,7 @@ export function ApplyForm() {
       const outcome = data.outcome ?? applyOutcome(form.licensed, form.bedside, form.desktop);
       markApplied();
       trackLead();
+      setEmailSent(Boolean(data.emailSent));
       setSubmitted(outcome);
     } catch {
       setSubmitError("Could not save your application. Please try again.");
@@ -149,7 +152,7 @@ export function ApplyForm() {
             </div>
 
             {submitted ? (
-              <Success firstName={form.firstName} outcome={submitted} />
+              <Success firstName={form.firstName} outcome={submitted} emailSent={emailSent} />
             ) : (
               <form noValidate onSubmit={onSubmit} className="flex min-h-0 flex-1 flex-col">
                 <div className="flex-1 space-y-7 overflow-y-auto px-6 py-6 sm:px-8">
@@ -285,7 +288,7 @@ export function ApplyForm() {
   );
 }
 
-function Success({ firstName, outcome }: { firstName: string; outcome: ApplyOutcome }) {
+function Success({ firstName, outcome, emailSent }: { firstName: string; outcome: ApplyOutcome; emailSent: boolean }) {
   const name = firstName.trim() || "there";
 
   if (outcome === "not_qualified") {
@@ -300,6 +303,27 @@ function Success({ firstName, outcome }: { firstName: string; outcome: ApplyOutc
           className="mt-7 inline-flex min-h-[56px] w-full items-center justify-center rounded-full border border-ink px-8 text-[16px] font-medium text-ink transition-colors duration-150 ease-out hover:bg-paper-2"
         >
           Close
+        </button>
+      </div>
+    );
+  }
+
+  if (outcome === "qualified_mobile" && emailSent) {
+    return (
+      <div className="px-6 pb-8 pt-6 sm:px-8">
+        <p className="text-[17px] leading-relaxed text-soft">
+          Thanks, {name}. We’ve emailed you the link so you can apply from your laptop later.
+        </p>
+        <p className="mt-5 border-l-2 border-ink pl-4 text-[15px] leading-relaxed text-soft">
+          The application and AI interview work best in Chrome on a laptop or desktop with camera and mic.
+          Plan for up to about 50 minutes.
+        </p>
+        <button
+          type="button"
+          onClick={closeApplyForm}
+          className="mt-7 inline-flex min-h-[56px] w-full items-center justify-center rounded-full bg-lime px-8 text-[18px] font-semibold text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-lime-hover"
+        >
+          Done
         </button>
       </div>
     );
