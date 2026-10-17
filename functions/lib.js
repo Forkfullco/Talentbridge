@@ -25,9 +25,14 @@ export function validEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim());
 }
 
+export function appsScriptConfigured(env) {
+  const url = env.APPS_SCRIPT_URL;
+  return typeof url === "string" && url.startsWith("https://");
+}
+
 export async function callAppsScript(env, payload) {
   const url = env.APPS_SCRIPT_URL;
-  if (!url) {
+  if (!appsScriptConfigured(env)) {
     throw new Error("APPS_SCRIPT_URL is not configured");
   }
   const res = await fetch(url, {

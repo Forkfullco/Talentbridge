@@ -1,4 +1,4 @@
-import { applyOutcome, callAppsScript, CORS_HEADERS, json, validEmail } from "../lib.js";
+import { applyOutcome, appsScriptConfigured, callAppsScript, CORS_HEADERS, json, validEmail } from "../lib.js";
 
 export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: CORS_HEADERS });
@@ -31,27 +31,42 @@ export async function onRequestPost(context) {
 
   const outcome = applyOutcome(licensed, bedside, desktop);
   const utm = body.utm && typeof body.utm === "object" ? body.utm : {};
+  const lead = {
+    timestamp: new Date().toISOString(),
+    firstName,
+    email,
+    phone,
+    licensed,
+    bedside,
+    state,
+    desktop,
+    consent,
+    utm,
+    outcome,
+  };
 
-  try {
-    const data = await callAppsScript(env, {
-      action: "apply",
-      firstName,
-      email,
-      phone,
-      licensed,
-      bedside,
-      state,
-      desktop,
-      consent,
-      utm,
-      outcome,
-    });
-    return json({
-      ok: true,
-      outcome,
-      emailSent: Boolean(data.emailSent),
-    });
-  } catch {
-    return json({ ok: false, error: "Could not save your application. Please try again." }, 502);
+  if (env.APPS_SCRIPT_URL) {
+    try {
+      const data = await callAppsScript(env, { action: "apply", ...lead });
+      return json({
+        ok: true,
+        outcome,
+        emailSent: Boolean(data.emailSent),
+      });
+    } catch {
+      return json({ ok: false, error: "Could not save your application. Please try again." }, 502);
+    }
   }
+
+  if (env.LEADS) {
+    const id = `${Date.now()}-${crypto.randomUUID()}`;
+    await env.LEADS.put(`lead:${id}`, JSON.stringify(lead));
+  }
+
+  return json({
+    ok: true,
+    outcome,
+    emailSent: false,
+    queued: true,
+  });
 }

@@ -1,4 +1,4 @@
-import { callAppsScript, CORS_HEADERS, json } from "../lib.js";
+import { appsScriptConfigured, callAppsScript, CORS_HEADERS, json } from "../lib.js";
 
 export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: CORS_HEADERS });
@@ -7,6 +7,9 @@ export async function onRequestOptions() {
 async function markApplied(env, token) {
   const value = String(token || "").trim();
   if (!value) return json({ ok: false, error: "Missing token" }, 400);
+  if (!appsScriptConfigured(env)) {
+    return json({ ok: true, already: false, queued: true });
+  }
   try {
     const data = await callAppsScript(env, { action: "applied", token: value });
     return json({ ok: true, already: Boolean(data.already) });
