@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { captureUtmsFromLocation } from "../lib/utm";
 import { Header } from "../components/Header";
 import { Hero } from "../components/Hero";
 import { Ticker } from "../components/Ticker";
@@ -13,6 +14,7 @@ import { StickyApply } from "../components/StickyApply";
 export function HomePage() {
   useEffect(() => {
     document.title = "Talent Bridge | The Bridge To Remote Work";
+    captureUtmsFromLocation();
   }, []);
 
   return (

@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
-import { APPLY_URL } from "../lib/apply";
-import { trackLead } from "../tracking/metaPixel";
-import { markApplied } from "../lib/sessionFlags";
+import { openApplyForm } from "../lib/applyModal";
 
 export function Header() {
   return (
@@ -11,19 +9,14 @@ export function Header() {
         <Link to="/" aria-label="TalentBridge home">
           <Logo />
         </Link>
-        <a
-          href={APPLY_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => {
-            markApplied();
-            trackLead();
-          }}
+        <button
+          type="button"
+          onClick={openApplyForm}
+          aria-haspopup="dialog"
           className="text-[15px] font-medium text-ink underline-offset-4 hover:underline"
         >
           Apply now
-          <span className="sr-only"> (opens in a new tab)</span>
-        </a>
+        </button>
       </div>
     </header>
   );

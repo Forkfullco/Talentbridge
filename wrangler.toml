@@ -1,0 +1,10 @@
+name = "talentbridge"
+compatibility_date = "2025-10-11"
+pages_build_output_dir = "dist"
+
+[vars]
+SITE_URL = "https://talentbridge-4pb.pages.dev"
+
+# Secrets (set with wrangler pages secret):
+#   APPLY_SECRET       shared with Apps Script
+#   APPS_SCRIPT_URL    Google Apps Script web app URL

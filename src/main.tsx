@@ -2,7 +2,7 @@ import "./index.css";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
-// Meta Pixel base code is in index.html; Apply CTAs use trackLead from ./tracking/metaPixel
+// Meta Pixel base code is in index.html; Lead fires from ApplyForm after save
 
 const rootEl = document.getElementById("root");
 if (rootEl) {

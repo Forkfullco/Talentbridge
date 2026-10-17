@@ -137,7 +137,7 @@ export function ExitIntent() {
             <p className="mt-3 text-[16px] leading-[1.5] text-soft">
               Application takes about 15–20 minutes. Open the listing and apply when you’re ready.
             </p>
-            <ApplyButton label="Apply now" className="mt-6 w-full" />
+            <ApplyButton label="Apply now" className="mt-6 w-full" onClick={() => setOpen(false)} />
             <button
               type="button"
               onClick={() => setOpen(false)}

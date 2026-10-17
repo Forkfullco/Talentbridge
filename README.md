@@ -1,32 +1,34 @@
-# React + TypeScript + Vite
+# TalentBridge
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Landing page for the remote RN / AI-training role. Apply opens a pre-qualification modal; leads go to a Google Sheet and qualified applicants get a Gmail sequence.
 
-Currently, two official plugins are available:
+## Live
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Site: https://talentbridge-4pb.pages.dev/ (custom domain: talentbridgeremote.com)
+- Cloudflare Pages project: `talentbridge`
+- Leads sheet: https://docs.google.com/spreadsheets/d/1hy0KYNqXzk3nwBDJq5YsuEomNCQb4bCdPNGoujA_Mec/edit
 
-## React Compiler
+## Local
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev    # http://127.0.0.1:18741/
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Local `/api/apply` is a Vite middleware so the form is previewable. It only writes the Google Sheet / sends email when `APPS_SCRIPT_URL` and `APPLY_SECRET` are set in the environment.
+
+## Production deploy
+
+```bash
+npm run build
+npx wrangler pages deploy dist --project-name=talentbridge --branch=main
+npx wrangler pages secret put APPLY_SECRET --project-name=talentbridge
+npx wrangler pages secret put APPS_SCRIPT_URL --project-name=talentbridge
+```
+
+Worker/Pages routes:
+
+- `POST /api/apply` — save lead, fire email 1 if qualified
+- `GET|POST /api/applied` — mark Sheet status `Applied` and stop reminders (`?t=` or JSON `{ token }`)
+
+Google Apps Script (Gmail + Sheet + hourly reminders): see [`apps-script/README.md`](apps-script/README.md). Unqualified (RN = No **or** inpatient/bedside = No) is stored as `Not qualified` and never shown the micro1 CTA.
