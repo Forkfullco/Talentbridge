@@ -61,12 +61,13 @@ export async function onRequestPost(context) {
   if (env.LEADS) {
     const id = `${Date.now()}-${crypto.randomUUID()}`;
     await env.LEADS.put(`lead:${id}`, JSON.stringify(lead));
+    return json({ ok: true, outcome, emailSent: false, queued: true });
   }
 
   return json({
     ok: true,
     outcome,
     emailSent: false,
-    queued: true,
+    stored: false,
   });
 }
