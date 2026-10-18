@@ -558,7 +558,7 @@ const EMPTY: FormState = {
   bedside: "",
   state: "",
   desktop: "",
-  consent: false,
+  consent: true,
 };
 
 function validate(f: FormState): Errors {

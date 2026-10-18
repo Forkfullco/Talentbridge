@@ -3,7 +3,7 @@ const APPLY_URL =
 const FROM = "TalentBridge <talent@talentbridgeremote.com>";
 const REPLY_TO = "officialleadsurge@gmail.com";
 
-export async function sendResend(env, { to, subject, html }) {
+export async function sendResend(env, { to, subject, html, replyTo }) {
   const key = env.RESEND_API_KEY;
   if (!key) return { ok: false, error: "missing_key" };
   const res = await fetch("https://api.resend.com/emails", {
@@ -15,7 +15,7 @@ export async function sendResend(env, { to, subject, html }) {
     body: JSON.stringify({
       from: FROM,
       to: [to],
-      reply_to: REPLY_TO,
+      reply_to: replyTo || REPLY_TO,
       subject,
       html,
     }),
@@ -31,10 +31,10 @@ export function messageFor(stage, { firstName, token, site }) {
   const applied = `${base}/applied?t=${encodeURIComponent(token)}`;
   if (stage === "not_fit") {
     return {
-      subject: "Other remote roles from TalentBridge",
+      subject: "Thanks for checking in with TalentBridge",
       html: shell(
-        "This role isn’t a fit",
-        `<p>Hi ${esc(name)},</p><p>Thanks for checking in. This particular remote RN role needs an active US license and recent inpatient/bedside experience, so we won’t send you the application link.</p><p>We’ll email you when another remote role looks like a better match.</p>`,
+        "Thanks for checking in",
+        `<p>Hi ${esc(name)},</p><p>This particular remote RN role is for nurses with an active US license and recent inpatient or bedside experience.</p><p>We’ll email you when another remote role looks like a better match.</p>`,
       ),
     };
   }
@@ -43,7 +43,7 @@ export function messageFor(stage, { firstName, token, site }) {
       subject: "Your TalentBridge application link + how to prep",
       html: shell(
         "Your application link",
-        `<p>Hi ${esc(name)},</p><p>You’re a fit for this remote RN AI-training role. The application is hosted by our hiring partner, micro1.</p>${cta(APPLY_URL, "Start your micro1 application")}<p><strong>How to prep</strong></p><ol><li>Create a new micro1 account using <strong>this same email</strong>.</li><li>Set aside up to about 50 minutes for the AI interview.</li><li>Use Chrome on a laptop or desktop with a working camera and microphone, in a quiet space.</li></ol><p><strong>Interview tips:</strong> speak clearly, use concrete examples from inpatient or bedside work, and take a breath before you answer.</p>${appliedLine(applied)}`,
+        `<p>Hi ${esc(name)},</p><p>You’re a fit for this remote RN AI-training role. Next is the application, then an AI interview.</p>${cta(APPLY_URL, "Start your application")}<p><strong>How to prep</strong></p><ol><li>Create an account using <strong>this same email</strong>.</li><li>Set aside up to about 50 minutes for the AI interview.</li><li>Use Chrome on a laptop or desktop with a working camera and microphone, in a quiet space.</li></ol><p><strong>Interview tips:</strong> speak clearly, use concrete examples from inpatient or bedside work, and take a breath before you answer.</p>${appliedLine(applied)}`,
       ),
     };
   }
@@ -52,7 +52,7 @@ export function messageFor(stage, { firstName, token, site }) {
       subject: "Did you get a chance to apply?",
       html: shell(
         "Still open — your link",
-        `<p>Hi ${esc(name)},</p><p>Your TalentBridge / micro1 application is still waiting. It takes about 15–20 minutes to start, plus the AI interview when you’re ready.</p>${cta(APPLY_URL, "Open your application")}${appliedLine(applied)}`,
+        `<p>Hi ${esc(name)},</p><p>Your application is still waiting. It takes about 15–20 minutes to start, plus the AI interview when you’re ready.</p>${cta(APPLY_URL, "Open your application")}${appliedLine(applied)}`,
       ),
     };
   }
@@ -60,7 +60,7 @@ export function messageFor(stage, { firstName, token, site }) {
     subject: "Last reminder: the remote RN role is still open",
     html: shell(
       "Last reminder",
-      `<p>Hi ${esc(name)},</p><p>This is the last note from us about this role. It’s still open, and your application link still works.</p>${cta(APPLY_URL, "Apply on micro1")}<p><strong>Quick FAQ</strong></p><ul><li><strong>Do I need a new account?</strong> Yes — create a micro1 account with the email you used on TalentBridge.</li><li><strong>How long is the interview?</strong> Plan for up to about 50 minutes.</li><li><strong>Phone or laptop?</strong> Laptop or desktop, Chrome, camera, and mic.</li></ul>${appliedLine(applied)}`,
+      `<p>Hi ${esc(name)},</p><p>This is the last note from us about this role. It’s still open, and your application link still works.</p>${cta(APPLY_URL, "Apply now")}<p><strong>Quick FAQ</strong></p><ul><li><strong>Do I need a new account?</strong> Yes — create an account with the email you used on TalentBridge.</li><li><strong>How long is the interview?</strong> Plan for up to about 50 minutes.</li><li><strong>Phone or laptop?</strong> Laptop or desktop, Chrome, camera, and mic.</li></ul>${appliedLine(applied)}`,
     ),
   };
 }
@@ -122,7 +122,7 @@ function cta(href, label) {
 }
 
 function appliedLine(href) {
-  return `<p style="margin-top:20px;font-size:14px">Already submitted on micro1? <a href="${esc(href)}">I’ve applied</a> — we’ll stop these reminders.</p>`;
+  return `<p style="margin-top:20px;font-size:14px">Already submitted your application? <a href="${esc(href)}">I’ve applied</a> — we’ll stop these reminders.</p>`;
 }
 
 function esc(value) {

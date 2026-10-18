@@ -8,7 +8,13 @@ export function Footer() {
         <div>
           <Logo size={32} />
         </div>
-        <nav aria-label="Legal" className="mt-6 flex flex-wrap gap-x-6 gap-y-2 md:mt-1">
+        <nav aria-label="Footer" className="mt-6 flex flex-wrap gap-x-6 gap-y-2 md:mt-1">
+          <Link
+            to="/contact"
+            className="text-[15px] font-medium text-ink underline underline-offset-4 hover:text-soft"
+          >
+            Contact
+          </Link>
           <Link
             to="/privacy"
             className="text-[15px] font-medium text-ink underline underline-offset-4 hover:text-soft"

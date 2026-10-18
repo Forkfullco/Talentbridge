@@ -39,6 +39,11 @@ export function PrivacyPage() {
           tags (UTM parameters) from the link you used. That record is stored in a Cloudflare D1 database we
           control.
         </li>
+        <li>
+          <span className="font-medium text-ink">Contact messages.</span> If you use the contact form we collect
+          your name, email, and message so we can reply. The message is emailed to TalentBridge; we do not add it
+          to the apply-lead database.
+        </li>
       </ul>
 
       <h2 className="font-serif text-[24px] font-medium text-ink">How we use information</h2>

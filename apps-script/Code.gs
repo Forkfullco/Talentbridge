@@ -217,10 +217,10 @@ function sendStage_(stage, firstName, email, token) {
       "Your application link",
       "<p>Hi " +
         esc_(name) +
-        ",</p><p>Thanks for checking in with TalentBridge. You’re a fit for this remote RN AI-training role. The application is hosted by our hiring partner, micro1.</p>" +
-        cta_(applyUrl, "Start your micro1 application") +
+        ",</p><p>Thanks for checking in with TalentBridge. You’re a fit for this remote RN AI-training role. Next is the application, then an AI interview.</p>" +
+        cta_(applyUrl, "Start your application") +
         "<p><strong>How to prep</strong></p><ol>" +
-        "<li>Create a new micro1 account using <strong>this same email</strong>.</li>" +
+        "<li>Create an account using <strong>this same email</strong>.</li>" +
         "<li>Set aside up to about 50 minutes for the AI interview.</li>" +
         "<li>Use Chrome on a laptop or desktop with a working camera and microphone, in a quiet space.</li>" +
         "</ol><p><strong>Interview tips:</strong> speak clearly, use concrete examples from inpatient/bedside work, and don’t rush — you can take a breath before answering.</p>" +
@@ -232,7 +232,7 @@ function sendStage_(stage, firstName, email, token) {
       "Still open — your link",
       "<p>Hi " +
         esc_(name) +
-        ",</p><p>Just a note that your TalentBridge / micro1 application is still waiting. It takes about 15–20 minutes to start, plus the AI interview when you’re ready.</p>" +
+        ",</p><p>Just a note that your application is still waiting. It takes about 15–20 minutes to start, plus the AI interview when you’re ready.</p>" +
         cta_(applyUrl, "Open your application") +
         appliedLine_(appliedUrl)
     );
@@ -243,9 +243,9 @@ function sendStage_(stage, firstName, email, token) {
       "<p>Hi " +
         esc_(name) +
         ",</p><p>This is the last note from us about this role. It’s still open, and your application link still works.</p>" +
-        cta_(applyUrl, "Apply on micro1") +
+        cta_(applyUrl, "Apply now") +
         "<p><strong>Quick FAQ</strong></p><ul>" +
-        "<li><strong>Do I need a new account?</strong> Yes — create a micro1 account with the email you used on TalentBridge.</li>" +
+        "<li><strong>Do I need a new account?</strong> Yes — create an account with the email you used on TalentBridge.</li>" +
         "<li><strong>How long is the interview?</strong> Plan for up to about 50 minutes.</li>" +
         "<li><strong>Phone or laptop?</strong> Laptop/desktop with Chrome, camera, and mic.</li>" +
         "</ul>" +
@@ -286,7 +286,7 @@ function cta_(href, label) {
 
 function appliedLine_(href) {
   return (
-    '<p style="margin-top:20px;font-size:14px">Already submitted on micro1? <a href="' +
+    '<p style="margin-top:20px;font-size:14px">Already submitted your application? <a href="' +
     esc_(href) +
     '">I’ve applied</a> — we’ll stop these reminders.</p>'
   );

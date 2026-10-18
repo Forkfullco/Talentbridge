@@ -34,8 +34,10 @@ npx wrangler d1 execute talentbridge-leads --remote --command "SELECT id, timest
 
 Routes:
 
-- `POST /api/apply` — insert the lead into D1 (`stored: true`). No email is sent.
+- `POST /api/apply` — insert the lead into D1 (`stored: true`) and send the first follow-up when Resend is configured.
 - `GET|POST /api/applied` — set status `Applied` and stop the scheduled sequence (`?t=` or JSON `{ token }`)
 - `GET /api/leads?secret=` — HTML table; add `format=json` or `format=csv`
+- `POST /api/contact` — email the message to talent@talentbridgeremote.com (Reply-To is the visitor)
+- `/contact` — contact form
 
 Unqualified (RN = No **or** inpatient/bedside = No) is stored as `Not qualified` and is not shown the micro1 CTA. Qualified applicants on a phone still get the micro1 link on screen.

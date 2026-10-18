@@ -33,7 +33,7 @@ function applyDevApi(): Plugin {
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         const url = req.url?.split("?")[0] || "";
-        if (url !== "/api/apply" && url !== "/api/applied") return next();
+        if (url !== "/api/apply" && url !== "/api/applied" && url !== "/api/contact") return next();
         if (req.method === "OPTIONS") {
           res.statusCode = 204;
           res.end();
@@ -42,6 +42,24 @@ function applyDevApi(): Plugin {
 
         const scriptUrl = process.env.APPS_SCRIPT_URL;
         const secret = process.env.APPLY_SECRET || "";
+
+        if (url === "/api/contact" && req.method === "POST") {
+          try {
+            const body = JSON.parse(await readBody(req)) as { name?: string; email?: string; message?: string };
+            const name = String(body.name || "").trim();
+            const email = String(body.email || "").trim();
+            const message = String(body.message || "").trim();
+            if (!name) return send(res, 400, { ok: false, error: "Enter your name." });
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+              return send(res, 400, { ok: false, error: "Enter a valid email address." });
+            }
+            if (!message) return send(res, 400, { ok: false, error: "Enter a message." });
+            send(res, 200, { ok: true });
+          } catch {
+            send(res, 400, { ok: false, error: "Invalid request" });
+          }
+          return;
+        }
 
         if (url === "/api/apply" && req.method === "POST") {
           try {

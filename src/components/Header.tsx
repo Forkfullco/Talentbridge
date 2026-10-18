@@ -9,14 +9,19 @@ export function Header() {
         <Link to="/" aria-label="TalentBridge home">
           <Logo />
         </Link>
-        <button
-          type="button"
-          onClick={openApplyForm}
-          aria-haspopup="dialog"
-          className="text-[15px] font-medium text-ink underline-offset-4 hover:underline"
-        >
-          Apply now
-        </button>
+        <div className="flex items-center gap-3 md:gap-5">
+          <Link to="/contact" className="text-[15px] font-medium text-ink underline-offset-4 hover:underline">
+            Contact
+          </Link>
+          <button
+            type="button"
+            onClick={openApplyForm}
+            aria-haspopup="dialog"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-lime px-4 text-[15px] font-semibold text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-lime-hover active:translate-y-px md:px-5"
+          >
+            Apply now
+          </button>
+        </div>
       </div>
     </header>
   );
