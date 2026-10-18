@@ -386,10 +386,10 @@ function StartEarningLink() {
       target="_blank"
       rel="noopener noreferrer"
       onClick={closeApplyForm}
-      className="mt-7 inline-flex min-h-[56px] w-full items-center justify-center gap-2 rounded-full bg-lime px-8 text-center text-[18px] font-semibold leading-tight text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-lime-hover active:translate-y-px"
+      className="mt-7 flex min-h-[56px] w-full items-center justify-center gap-2 rounded-full bg-lime px-5 py-3 text-center text-[16px] font-semibold leading-snug text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-lime-hover active:translate-y-px sm:px-8 sm:text-[18px]"
     >
-      Start earning 60-70 an hour now
-      <ArrowUpRight size={20} strokeWidth={2.5} aria-hidden />
+      <span className="min-w-0 text-balance">Continue to finish applying</span>
+      <ArrowUpRight size={20} strokeWidth={2.5} className="shrink-0" aria-hidden />
       <span className="sr-only">(opens in a new tab)</span>
     </a>
   );
