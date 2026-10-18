@@ -44,19 +44,19 @@ export function messageFor(stage, { firstName, token, site }) {
   }
   if (stage === 1) {
     return {
-      subject: "Your TalentBridge application link + how to prep",
+      subject: "Your application link — only 5 positions open",
       html: shell(
         "Your application link",
-        `<p>Hi ${esc(name)},</p><p>You’re a fit for this remote RN AI-training role. Next is the application, then an AI interview.</p>${cta(APPLY_URL, "Start your application")}<p><strong>How to prep</strong></p><ol><li>Create an account using <strong>this same email</strong>.</li><li>Set aside up to about 50 minutes for the AI interview.</li><li>Use Chrome on a laptop or desktop with a working camera and microphone, in a quiet space.</li></ol><p><strong>Interview tips:</strong> speak clearly, use concrete examples from inpatient or bedside work, and take a breath before you answer.</p>${appliedLine(applied)}`,
+        `<p>Hi ${esc(name)},</p><p>You’re a fit for this remote RN AI-training role. There are only 5 positions open. Next is the application, then an AI interview.</p>${cta(APPLY_URL, "Start your application")}<p><strong>How to prep</strong></p><ol><li>Create an account using <strong>this same email</strong>.</li><li>Set aside up to about 50 minutes for the AI interview.</li><li>Use Chrome on a laptop or desktop with a working camera and microphone, in a quiet space.</li></ol><p><strong>Interview tips:</strong> speak clearly, use concrete examples from inpatient or bedside work, and take a breath before you answer.</p>${appliedLine(applied)}`,
       ),
     };
   }
   if (stage === 2) {
     return {
-      subject: "Did you get a chance to apply?",
+      subject: "Only 5 positions open — did you get a chance to apply?",
       html: shell(
         "Still open — your link",
-        `<p>Hi ${esc(name)},</p><p>Your application is still waiting. Starting it takes about 15–20 minutes. You can do the AI interview after that, when you have a quiet hour.</p>${cta(APPLY_URL, "Open your application")}${appliedLine(applied)}`,
+        `<p>Hi ${esc(name)},</p><p>Your application is still waiting, and there are only 5 positions open. Starting it takes about 15–20 minutes. You can do the AI interview after that, when you have a quiet hour.</p>${cta(APPLY_URL, "Open your application")}${appliedLine(applied)}`,
       ),
     };
   }
@@ -65,7 +65,7 @@ export function messageFor(stage, { firstName, token, site }) {
       subject: "Why nurses take this remote role",
       html: shell(
         "Remote work that uses your clinical judgment",
-        `<p>Hi ${esc(name)},</p><p>Matched work pays $60–70 an hour, from home, on hours you choose. You use the inpatient and bedside judgment you already have to help train medical AI. TalentBridge never asks you for money to apply.</p><p>The next step is still the application, then an AI interview of about 50 minutes. Use Chrome on a laptop or desktop with a camera and mic.</p>${cta(APPLY_URL, "Start your application")}${appliedLine(applied)}`,
+        `<p>Hi ${esc(name)},</p><p>There are only 5 positions open. Matched work pays $60–70 an hour, from home, on hours you choose. You use the inpatient and bedside judgment you already have to help train medical AI. TalentBridge never asks you for money to apply.</p><p>The next step is still the application, then an AI interview of about 50 minutes. Use Chrome on a laptop or desktop with a camera and mic.</p>${cta(APPLY_URL, "Start your application")}${appliedLine(applied)}`,
       ),
     };
   }
@@ -74,24 +74,24 @@ export function messageFor(stage, { firstName, token, site }) {
       subject: "Use this same email on the application",
       html: shell(
         "One account, this email",
-        `<p>Hi ${esc(name)},</p><p>Create the account with <strong>this same email</strong> so the application lines up with the note you just sent us. The form is still about 15–20 minutes.</p><p>If you already finished, use I’ve applied below and we’ll stop these reminders.</p>${cta(APPLY_URL, "Open your application")}${appliedLine(applied)}`,
+        `<p>Hi ${esc(name)},</p><p>There are only 5 positions open. Create the account with <strong>this same email</strong> so the application lines up with the note you just sent us. The form is still about 15–20 minutes.</p><p>If you already finished, use I’ve applied below and we’ll stop these reminders.</p>${cta(APPLY_URL, "Open your application")}${appliedLine(applied)}`,
       ),
     };
   }
   if (stage === 5) {
     return {
-      subject: "The remote RN role is still open",
+      subject: "Only 5 positions open — still time to finish",
       html: shell(
         "Still time to finish",
-        `<p>Hi ${esc(name)},</p><p>The role is still open, and your link still works. Nurses who finish the application and the AI interview are the ones who get matched. It will not stay open forever — if you want the remote $60–70/hr work, start today.</p>${cta(APPLY_URL, "Apply now")}${appliedLine(applied)}`,
+        `<p>Hi ${esc(name)},</p><p>There are only 5 positions open, and your link still works. Nurses who finish the application and the AI interview are the ones who get matched. If you want the remote $60–70/hr work, start today.</p>${cta(APPLY_URL, "Apply now")}${appliedLine(applied)}`,
       ),
     };
   }
   return {
-    subject: "Last reminder: finish your application",
+    subject: "Last reminder: only 5 positions open",
     html: shell(
       "Last reminder",
-      `<p>Hi ${esc(name)},</p><p>This is the last note from us about this role. Your application link still works. Plan about 15–20 minutes to start, then up to about 50 minutes for the AI interview.</p>${cta(APPLY_URL, "Apply now")}<p><strong>Quick FAQ</strong></p><ul><li><strong>Do I need a new account?</strong> Yes — create an account with the email you used on TalentBridge.</li><li><strong>How long is the interview?</strong> Plan for up to about 50 minutes.</li><li><strong>Phone or laptop?</strong> Laptop or desktop, Chrome, camera, and mic.</li></ul>${appliedLine(applied)}`,
+      `<p>Hi ${esc(name)},</p><p>This is the last note from us about this role. There are only 5 positions open, and your application link still works. Plan about 15–20 minutes to start, then up to about 50 minutes for the AI interview.</p>${cta(APPLY_URL, "Apply now")}<p><strong>Quick FAQ</strong></p><ul><li><strong>Do I need a new account?</strong> Yes — create an account with the email you used on TalentBridge.</li><li><strong>How long is the interview?</strong> Plan for up to about 50 minutes.</li><li><strong>Phone or laptop?</strong> Laptop or desktop, Chrome, camera, and mic.</li></ul>${appliedLine(applied)}`,
     ),
   };
 }
