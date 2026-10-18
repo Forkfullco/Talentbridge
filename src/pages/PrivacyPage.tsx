@@ -124,8 +124,8 @@ export function PrivacyPage() {
         >
           Cloudflare’s Privacy Policy
         </a>
-        . Qualified leads are marked for an email sequence (immediate, about 24 hours, and about 3 days). Those
-        messages are not sent until an email provider is connected. Each planned email includes an “I’ve
+        . Qualified leads are marked for an email sequence (right away, then reminders at about 4 hours, 12 hours,
+        1 day, 2 days, and 3 days). Each planned email includes an “I’ve
         applied” link that sets status to Applied and stops further reminders. Unqualified submissions are
         stored with status “Not qualified” and are not given the micro1 application as a fit. A Meta Pixel{" "}
         <span className="font-medium text-ink">Lead</span> event and a Google Analytics{" "}

@@ -1,5 +1,5 @@
 import { applyOutcome, CORS_HEADERS, json, utmValue, validEmail } from "../lib.js";
-import { sendLeadEmail } from "../mail.js";
+import { DRIP_HOURS, sendLeadEmail } from "../mail.js";
 
 export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: CORS_HEADERS });
@@ -65,8 +65,8 @@ export async function onRequestPost(context) {
         token,
         emailStatus,
         qualified ? now.toISOString() : "",
-        qualified ? new Date(now.getTime() + 24 * hour).toISOString() : "",
-        qualified ? new Date(now.getTime() + 72 * hour).toISOString() : "",
+        qualified ? new Date(now.getTime() + DRIP_HOURS[2] * hour).toISOString() : "",
+        qualified ? new Date(now.getTime() + DRIP_HOURS[3] * hour).toISOString() : "",
         "",
       )
       .run();

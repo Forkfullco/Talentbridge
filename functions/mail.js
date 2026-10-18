@@ -3,6 +3,10 @@ const APPLY_URL =
 const FROM = "TalentBridge <talent@talentbridgeremote.com>";
 const REPLY_TO = "officialleadsurge@gmail.com";
 
+/** Hours after the apply timestamp. Stage 1 is sent immediately by /api/apply. */
+export const DRIP_HOURS = { 1: 0, 2: 4, 3: 12, 4: 24, 5: 48, 6: 72 };
+const LAST_STAGE = 6;
+
 export async function sendResend(env, { to, subject, html, replyTo }) {
   const key = env.RESEND_API_KEY;
   if (!key) return { ok: false, error: "missing_key" };
@@ -52,15 +56,42 @@ export function messageFor(stage, { firstName, token, site }) {
       subject: "Did you get a chance to apply?",
       html: shell(
         "Still open — your link",
-        `<p>Hi ${esc(name)},</p><p>Your application is still waiting. It takes about 15–20 minutes to start, plus the AI interview when you’re ready.</p>${cta(APPLY_URL, "Open your application")}${appliedLine(applied)}`,
+        `<p>Hi ${esc(name)},</p><p>Your application is still waiting. Starting it takes about 15–20 minutes. You can do the AI interview after that, when you have a quiet hour.</p>${cta(APPLY_URL, "Open your application")}${appliedLine(applied)}`,
+      ),
+    };
+  }
+  if (stage === 3) {
+    return {
+      subject: "Why nurses take this remote role",
+      html: shell(
+        "Remote work that uses your clinical judgment",
+        `<p>Hi ${esc(name)},</p><p>Matched work pays $60–70 an hour, from home, on hours you choose. You use the inpatient and bedside judgment you already have to help train medical AI. TalentBridge never asks you for money to apply.</p><p>The next step is still the application, then an AI interview of about 50 minutes. Use Chrome on a laptop or desktop with a camera and mic.</p>${cta(APPLY_URL, "Start your application")}${appliedLine(applied)}`,
+      ),
+    };
+  }
+  if (stage === 4) {
+    return {
+      subject: "Use this same email on the application",
+      html: shell(
+        "One account, this email",
+        `<p>Hi ${esc(name)},</p><p>Create the account with <strong>this same email</strong> so the application lines up with the note you just sent us. The form is still about 15–20 minutes.</p><p>If you already finished, use I’ve applied below and we’ll stop these reminders.</p>${cta(APPLY_URL, "Open your application")}${appliedLine(applied)}`,
+      ),
+    };
+  }
+  if (stage === 5) {
+    return {
+      subject: "The remote RN role is still open",
+      html: shell(
+        "Still time to finish",
+        `<p>Hi ${esc(name)},</p><p>The role is still open, and your link still works. Nurses who finish the application and the AI interview are the ones who get matched. It will not stay open forever — if you want the remote $60–70/hr work, start today.</p>${cta(APPLY_URL, "Apply now")}${appliedLine(applied)}`,
       ),
     };
   }
   return {
-    subject: "Last reminder: the remote RN role is still open",
+    subject: "Last reminder: finish your application",
     html: shell(
       "Last reminder",
-      `<p>Hi ${esc(name)},</p><p>This is the last note from us about this role. It’s still open, and your application link still works.</p>${cta(APPLY_URL, "Apply now")}<p><strong>Quick FAQ</strong></p><ul><li><strong>Do I need a new account?</strong> Yes — create an account with the email you used on TalentBridge.</li><li><strong>How long is the interview?</strong> Plan for up to about 50 minutes.</li><li><strong>Phone or laptop?</strong> Laptop or desktop, Chrome, camera, and mic.</li></ul>${appliedLine(applied)}`,
+      `<p>Hi ${esc(name)},</p><p>This is the last note from us about this role. Your application link still works. Plan about 15–20 minutes to start, then up to about 50 minutes for the AI interview.</p>${cta(APPLY_URL, "Apply now")}<p><strong>Quick FAQ</strong></p><ul><li><strong>Do I need a new account?</strong> Yes — create an account with the email you used on TalentBridge.</li><li><strong>How long is the interview?</strong> Plan for up to about 50 minutes.</li><li><strong>Phone or laptop?</strong> Laptop or desktop, Chrome, camera, and mic.</li></ul>${appliedLine(applied)}`,
     ),
   };
 }
@@ -71,33 +102,23 @@ export async function sendLeadEmail(env, stage, lead) {
   return sendResend(env, { to: lead.email, subject: msg.subject, html: msg.html });
 }
 
-/** Hourly drip: email 1 if still unsent, then +24h, then +3 days. Stops when status is Applied. */
+/** Hourly drip from the apply timestamp: 0h, 4h, 12h, 24h, 48h, 72h. Stops when status is Applied. */
 export async function processReminders(env) {
   if (!env.DB || !env.RESEND_API_KEY) return { ok: false, skipped: true };
-  const now = new Date().toISOString();
+  const nowMs = Date.now();
   const { results } = await env.DB.prepare(
-    `SELECT id, first_name, email, applied_token, email_status, email1_due, email2_due, email3_due
+    `SELECT id, timestamp, first_name, email, applied_token, email_status
      FROM leads
      WHERE status = 'New' AND (stopped IS NULL OR stopped = '')
-       AND email_status IN ('needs_provider', 'send_failed', 'sent_1', 'sent_2')
+       AND email_status IN ('needs_provider', 'send_failed', 'sent_1', 'sent_2', 'sent_3', 'sent_4', 'sent_5')
      ORDER BY id ASC
      LIMIT 50`,
   ).all();
   let sent = 0;
   for (const row of results || []) {
-    let stage = 0;
-    let nextStatus = "";
-    if ((row.email_status === "needs_provider" || row.email_status === "send_failed") && row.email1_due && row.email1_due <= now) {
-      stage = 1;
-      nextStatus = "sent_1";
-    } else if (row.email_status === "sent_1" && row.email2_due && row.email2_due <= now) {
-      stage = 2;
-      nextStatus = "sent_2";
-    } else if (row.email_status === "sent_2" && row.email3_due && row.email3_due <= now) {
-      stage = 3;
-      nextStatus = "sent_3";
-    }
+    const stage = dueStage(row, nowMs);
     if (!stage) continue;
+    const nextStatus = `sent_${stage}`;
     const result = await sendLeadEmail(env, stage, row);
     if (result.ok) {
       await env.DB.prepare("UPDATE leads SET email_status = ? WHERE id = ? AND status = 'New' AND (stopped IS NULL OR stopped = '')")
@@ -111,6 +132,22 @@ export async function processReminders(env) {
     }
   }
   return { ok: true, sent };
+}
+
+function dueStage(row, nowMs) {
+  const sent = sentCount(row.email_status);
+  if (sent < 0 || sent >= LAST_STAGE) return 0;
+  const stage = sent + 1;
+  const start = Date.parse(row.timestamp);
+  if (!Number.isFinite(start)) return 0;
+  const due = start + DRIP_HOURS[stage] * 60 * 60 * 1000;
+  return due <= nowMs ? stage : 0;
+}
+
+function sentCount(status) {
+  if (status === "needs_provider" || status === "send_failed") return 0;
+  const match = /^sent_(\d+)$/.exec(status || "");
+  return match ? Number(match[1]) : -1;
 }
 
 function shell(title, inner) {
