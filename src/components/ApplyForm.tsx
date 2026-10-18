@@ -105,7 +105,7 @@ export function ApplyForm() {
   const title = submitted
     ? submitted === "not_qualified"
       ? "Thanks for reaching out"
-      : "Your application link"
+      : "Finish your application"
     : "Quick check before you apply";
 
   return (
@@ -290,6 +290,7 @@ export function ApplyForm() {
 
 function Success({ firstName, outcome, emailSent }: { firstName: string; outcome: ApplyOutcome; emailSent: boolean }) {
   const name = firstName.trim() || "there";
+  const [readyNow, setReadyNow] = useState<boolean | null>(null);
 
   if (outcome === "not_qualified") {
     return (
@@ -308,95 +309,89 @@ function Success({ firstName, outcome, emailSent }: { firstName: string; outcome
     );
   }
 
-  if (outcome === "qualified_mobile" && emailSent) {
-    return (
-      <div className="px-6 pb-8 pt-6 sm:px-8">
-        <p className="text-[17px] leading-relaxed text-soft">
-          Thanks, {name}. We’ve emailed you the link so you can apply from your laptop later.
-        </p>
-        <p className="mt-5 border-l-2 border-ink pl-4 text-[15px] leading-relaxed text-soft">
-          The application and AI interview work best in Chrome on a laptop or desktop with camera and mic.
-          Plan for up to about 50 minutes.
-        </p>
-        <button
-          type="button"
-          onClick={closeApplyForm}
-          className="mt-7 inline-flex min-h-[56px] w-full items-center justify-center rounded-full bg-lime px-8 text-[18px] font-semibold text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-lime-hover"
-        >
-          Done
-        </button>
-      </div>
-    );
-  }
-
-  if (outcome === "qualified_mobile") {
-    return (
-      <div className="px-6 pb-8 pt-6 sm:px-8">
-        <p className="text-[17px] leading-relaxed text-soft">
-          Thanks, {name}. The application and AI interview work best on a laptop. Open the link below there
-          when you can.
-        </p>
-        <ul className="mt-5 space-y-2.5 text-[15px] leading-relaxed text-soft">
-          <li className="flex gap-2">
-            <Check size={18} className="mt-0.5 shrink-0" strokeWidth={2.5} aria-hidden />
-            Create a new micro1 account with this same email
-          </li>
-          <li className="flex gap-2">
-            <Check size={18} className="mt-0.5 shrink-0" strokeWidth={2.5} aria-hidden />
-            AI interview takes up to about 50 minutes
-          </li>
-          <li className="flex gap-2">
-            <Check size={18} className="mt-0.5 shrink-0" strokeWidth={2.5} aria-hidden />
-            Use Chrome on a laptop with camera and microphone
-          </li>
-        </ul>
-        <a
-          href={APPLY_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={closeApplyForm}
-          className="mt-7 inline-flex min-h-[56px] w-full items-center justify-center gap-2 rounded-full bg-lime px-8 text-[18px] font-semibold text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-lime-hover active:translate-y-px"
-        >
-          Start your micro1 application
-          <ArrowUpRight size={20} strokeWidth={2.5} aria-hidden />
-          <span className="sr-only">(opens in a new tab)</span>
-        </a>
-      </div>
-    );
-  }
-
   return (
     <div className="px-6 pb-8 pt-6 sm:px-8">
-      <p className="text-[17px] leading-relaxed text-soft">
-        Thanks, {name}. Next step is the micro1 application — new account with this email, then an AI
-        interview.
-      </p>
-      <ul className="mt-5 space-y-2.5 text-[15px] leading-relaxed text-soft">
-        <li className="flex gap-2">
-          <Check size={18} className="mt-0.5 shrink-0" strokeWidth={2.5} aria-hidden />
-          Create a new micro1 account with this same email
-        </li>
-        <li className="flex gap-2">
-          <Check size={18} className="mt-0.5 shrink-0" strokeWidth={2.5} aria-hidden />
-          AI interview takes up to about 50 minutes
-        </li>
-        <li className="flex gap-2">
-          <Check size={18} className="mt-0.5 shrink-0" strokeWidth={2.5} aria-hidden />
-          Use Chrome on a laptop with camera and microphone
-        </li>
-      </ul>
-      <a
-        href={APPLY_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={closeApplyForm}
-        className="mt-7 inline-flex min-h-[56px] w-full items-center justify-center gap-2 rounded-full bg-lime px-8 text-[18px] font-semibold text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-lime-hover active:translate-y-px"
-      >
-        Start your micro1 application
-        <ArrowUpRight size={20} strokeWidth={2.5} aria-hidden />
-        <span className="sr-only">(opens in a new tab)</span>
-      </a>
+      <p className="text-[17px] leading-relaxed text-soft">Quick interview.</p>
+      <p className="mt-5 text-[17px] font-medium leading-relaxed text-ink">Do you have time now?</p>
+      <div className="mt-3 flex gap-2.5">
+        <ChoiceButton selected={readyNow === true} onClick={() => setReadyNow(true)}>
+          Yes
+        </ChoiceButton>
+        <ChoiceButton selected={readyNow === false} onClick={() => setReadyNow(false)}>
+          No
+        </ChoiceButton>
+      </div>
+
+      {readyNow === true && <StartEarningLink />}
+
+      {readyNow === false && emailSent && (
+        <>
+          <p className="mt-6 text-[17px] leading-relaxed text-soft">
+            Thanks, {name}. We’ve emailed you the link so you can apply from your laptop later.
+          </p>
+          <p className="mt-5 border-l-2 border-ink pl-4 text-[15px] leading-relaxed text-soft">
+            The application and interview work best in Chrome on a laptop or desktop with a camera and mic.
+            Plan for up to about 50 minutes.
+          </p>
+          <button
+            type="button"
+            onClick={closeApplyForm}
+            className="mt-7 inline-flex min-h-[56px] w-full items-center justify-center rounded-full bg-lime px-8 text-[18px] font-semibold text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-lime-hover"
+          >
+            Done
+          </button>
+        </>
+      )}
+
+      {readyNow === false && !emailSent && (
+        <>
+          <p className="mt-6 text-[17px] leading-relaxed text-soft">
+            Thanks, {name}. Open this when you have a laptop. The application and interview work best in Chrome
+            with a camera and mic.
+          </p>
+          <StartEarningLink />
+        </>
+      )}
     </div>
+  );
+}
+
+function ChoiceButton({
+  selected,
+  onClick,
+  children,
+}: {
+  selected: boolean;
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={selected}
+      className={`inline-flex min-h-[46px] min-w-[96px] items-center justify-center rounded-lg border px-5 text-[15px] font-medium transition-colors duration-150 ease-out ${
+        selected ? "border-ink bg-ink text-paper" : "border-line bg-card text-ink hover:border-ink"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function StartEarningLink() {
+  return (
+    <a
+      href={APPLY_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={closeApplyForm}
+      className="mt-7 inline-flex min-h-[56px] w-full items-center justify-center gap-2 rounded-full bg-lime px-8 text-center text-[18px] font-semibold leading-tight text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-lime-hover active:translate-y-px"
+    >
+      Start earning 60-70 an hour now
+      <ArrowUpRight size={20} strokeWidth={2.5} aria-hidden />
+      <span className="sr-only">(opens in a new tab)</span>
+    </a>
   );
 }
 
