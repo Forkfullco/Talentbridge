@@ -2,8 +2,9 @@ export type YN = "yes" | "no" | "";
 
 export type ApplyOutcome = "not_qualified" | "qualified_desktop" | "qualified_mobile";
 
-export function isQualified(licensed: YN, bedside: YN) {
-  return licensed === "yes" && bedside === "yes";
+/** Bedside is preferred and still stored. Only a missing US RN license disqualifies. */
+export function isQualified(licensed: YN, _bedside: YN) {
+  return licensed === "yes";
 }
 
 export function applyOutcome(licensed: YN, bedside: YN, desktop: YN): ApplyOutcome {

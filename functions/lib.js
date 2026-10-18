@@ -11,8 +11,8 @@ export function json(data, status = 200) {
   });
 }
 
-export function applyOutcome(licensed, bedside, desktop) {
-  if (licensed !== "yes" || bedside !== "yes") return "not_qualified";
+export function applyOutcome(licensed, _bedside, desktop) {
+  if (licensed !== "yes") return "not_qualified";
   if (desktop === "no") return "qualified_mobile";
   return "qualified_desktop";
 }

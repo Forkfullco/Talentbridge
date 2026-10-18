@@ -40,4 +40,4 @@ Routes:
 - `POST /api/contact` — email the message to talent@talentbridgeremote.com (Reply-To is the visitor)
 - `/contact` — contact form
 
-Unqualified (RN = No **or** inpatient/bedside = No) is stored as `Not qualified` and is not shown the micro1 CTA. Qualified applicants on a phone still get the micro1 link on screen.
+Unqualified (RN = No) is stored as `Not qualified`. Bedside experience is stored and preferred, and a No there still gets status New and the qualified follow-up. Qualified applicants on a phone still get the application link by email.

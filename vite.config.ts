@@ -5,8 +5,8 @@ import { defineConfig, type Plugin } from "vite";
 
 type YN = "yes" | "no" | "";
 
-function applyOutcome(licensed: YN, bedside: YN, desktop: YN) {
-  if (licensed !== "yes" || bedside !== "yes") return "not_qualified" as const;
+function applyOutcome(licensed: YN, _bedside: YN, desktop: YN) {
+  if (licensed !== "yes") return "not_qualified" as const;
   if (desktop === "no") return "qualified_mobile" as const;
   return "qualified_desktop" as const;
 }
