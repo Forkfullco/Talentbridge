@@ -3,7 +3,7 @@
  * ------------------------------------------------------------------
  * Base snippets live in index.html <head> (gtag + fbq init / PageView /
  * noscript) so they load before React. This module fires Lead events on
- * Apply clicks via trackLead().
+ * successful apply-form submit via trackLead() (not on the Apply click).
  */
 export const PIXEL_ID = "1685542169905756";
 export const GA_MEASUREMENT_ID = "G-CW1HP8BX8B";
@@ -23,7 +23,7 @@ declare global {
   }
 }
 
-/** Fire Lead / generate_lead. Call synchronously in the click handler, before navigation. */
+/** Fire Meta Lead + GA generate_lead. Call after a successful form save. */
 export function trackLead() {
   try {
     window.fbq?.("track", "Lead");

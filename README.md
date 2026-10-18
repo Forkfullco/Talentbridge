@@ -1,32 +1,43 @@
-# React + TypeScript + Vite
+# TalentBridge
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Landing page for the remote RN / AI-training role. Apply opens a pre-qualification modal. Leads are stored in Cloudflare D1 (`talentbridge-leads`). Email reminders are scheduled on the row (`email_status = needs_provider`) and are not sent until a provider such as Resend or Brevo is connected.
 
-Currently, two official plugins are available:
+## Live
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Site: https://talentbridge-4pb.pages.dev/ (custom domain: talentbridgeremote.com)
+- Cloudflare Pages project: `talentbridge`
+- Leads: `GET /api/leads?secret=APPLY_SECRET` (HTML, or `&format=json` / `&format=csv`)
 
-## React Compiler
+## Local
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev    # http://127.0.0.1:18741/
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Local `/api/apply` is a Vite middleware so the form is previewable. Production writes D1.
+
+## Production deploy
+
+```bash
+npm run build
+npx wrangler pages deploy dist --project-name=talentbridge --branch=main
+npx wrangler pages secret put APPLY_SECRET --project-name=talentbridge
+npx wrangler d1 execute talentbridge-leads --remote --file=d1/schema.sql
+```
+
+View leads:
+
+```bash
+npx wrangler d1 execute talentbridge-leads --remote --command "SELECT id, timestamp, first_name, email, status, email_status FROM leads ORDER BY id DESC"
+```
+
+Routes:
+
+- `POST /api/apply` — insert the lead into D1 (`stored: true`) and send the first follow-up when Resend is configured.
+- `GET|POST /api/applied` — set status `Applied` and stop the scheduled sequence (`?t=` or JSON `{ token }`)
+- `GET /api/leads?secret=` — HTML table; add `format=json` or `format=csv`
+- `POST /api/contact` — email the message to talent@talentbridgeremote.com (Reply-To is the visitor)
+- `/contact` — contact form
+
+Unqualified (RN = No **or** inpatient/bedside = No) is stored as `Not qualified` and is not shown the micro1 CTA. Qualified applicants on a phone still get the micro1 link on screen.

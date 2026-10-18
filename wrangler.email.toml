@@ -1,0 +1,18 @@
+name = "talentbridge-email"
+main = "email-worker/index.js"
+compatibility_date = "2025-10-11"
+workers_dev = false
+preview_urls = false
+
+[vars]
+SITE_URL = "https://talentbridge-4pb.pages.dev"
+
+# Secret: wrangler secret put RESEND_API_KEY -c wrangler.email.toml
+
+[[d1_databases]]
+binding = "DB"
+database_name = "talentbridge-leads"
+database_id = "e895b9fe-6a16-4a7c-bebe-6768e318edf8"
+
+[triggers]
+crons = ["15 * * * *"]

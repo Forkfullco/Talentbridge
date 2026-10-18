@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { LegalLayout } from "./LegalLayout";
 
-const UPDATED = "October 16, 2026"; // GA + Meta analytics disclosed
+const UPDATED = "October 17, 2026";
 
 export function PrivacyPage() {
   useEffect(() => {
@@ -15,8 +15,9 @@ export function PrivacyPage() {
       <p>
         TalentBridge (“we,” “us,” or “our”) operates the website at talentbridgeremote.com and related pages
         (the “Site”). This Privacy Policy explains what information we collect when you visit the Site, how we
-        use it, and the choices you have. The Site promotes remote registered-nurse opportunities and links you
-        to an external application hosted by a hiring partner (currently Micro1).
+        use it, and the choices you have. The Site promotes remote registered-nurse opportunities, collects a
+        short pre-qualification form, and — when the role is a fit — links you to an external application
+        hosted by a hiring partner (currently Micro1).
       </p>
 
       <h2 className="font-serif text-[24px] font-medium text-ink">Information we collect</h2>
@@ -32,9 +33,16 @@ export function PrivacyPage() {
           “Microsoft Clarity,” and “Meta Pixel” below.
         </li>
         <li>
-          <span className="font-medium text-ink">Information you choose to share.</span> The Site itself does not
-          host a job application form. If you click Apply, you leave our Site and interact with the hiring
-          partner’s systems under their privacy practices.
+          <span className="font-medium text-ink">Information you choose to share.</span> If you submit the Apply
+          form we collect your first name, email, optional phone number, RN license and bedside-experience
+          answers, optional state of licensure, whether you are on a laptop/desktop, email-consent, and campaign
+          tags (UTM parameters) from the link you used. That record is stored in a Cloudflare D1 database we
+          control.
+        </li>
+        <li>
+          <span className="font-medium text-ink">Contact messages.</span> If you use the contact form we collect
+          your name, email, and message so we can reply. The message is emailed to TalentBridge; we do not add it
+          to the apply-lead database.
         </li>
       </ul>
 
@@ -46,7 +54,11 @@ export function PrivacyPage() {
           Measure traffic, engagement, and campaign performance (including Google Analytics, Microsoft Clarity,
           and Meta ads)
         </li>
-        <li>Understand whether visitors click Apply and related conversion events</li>
+        <li>Understand whether visitors submit Apply and related conversion events</li>
+        <li>
+          Email you the application link and a short reminder sequence when you qualify, and tell you about
+          similar remote roles
+        </li>
         <li>Comply with law and enforce our Terms</li>
       </ul>
 
@@ -62,7 +74,7 @@ export function PrivacyPage() {
         >
           Google’s Privacy Policy
         </a>
-        . When you click Apply we may also send a{" "}
+        . When you successfully submit the Apply form we may also send a{" "}
         <span className="font-medium text-ink">generate_lead</span> event to Google Analytics for conversion
         measurement. You can limit Google Analytics via browser controls or Google’s opt-out tools where
         available.
@@ -87,8 +99,8 @@ export function PrivacyPage() {
       <h2 className="font-serif text-[24px] font-medium text-ink">Meta Pixel and advertising</h2>
       <p>
         We use the Meta (Facebook) Pixel on the Site. The Pixel helps us measure PageViews and “Lead” events
-        when you click Apply, and may help Meta deliver or measure ads. Meta may receive identifiers and
-        event data and combine them with other information it holds under{" "}
+        when you successfully submit the Apply form, and may help Meta deliver or measure ads. Meta may receive
+        identifiers and event data and combine them with other information it holds under{" "}
         <a
           href="https://www.facebook.com/privacy/policy/"
           target="_blank"
@@ -100,20 +112,41 @@ export function PrivacyPage() {
         . You can control ad preferences in your Meta account and through browser or device settings.
       </p>
 
+      <h2 className="font-serif text-[24px] font-medium text-ink">Lead records, email follow-ups, and Pixel Lead</h2>
+      <p>
+        Form submissions are stored in Cloudflare D1 (database name talentbridge-leads), hosted by Cloudflare
+        under{" "}
+        <a
+          href="https://www.cloudflare.com/privacypolicy/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium text-ink underline underline-offset-4"
+        >
+          Cloudflare’s Privacy Policy
+        </a>
+        . Qualified leads are marked for an email sequence (immediate, about 24 hours, and about 3 days). Those
+        messages are not sent until an email provider is connected. Each planned email includes an “I’ve
+        applied” link that sets status to Applied and stops further reminders. Unqualified submissions are
+        stored with status “Not qualified” and are not given the micro1 application as a fit. A Meta Pixel{" "}
+        <span className="font-medium text-ink">Lead</span> event and a Google Analytics{" "}
+        <span className="font-medium text-ink">generate_lead</span> event fire after a successful form save.
+      </p>
+
       <h2 className="font-serif text-[24px] font-medium text-ink">Outbound apply / hiring partner</h2>
       <p>
-        Apply links open a third-party application (for example, on jobs.micro1.ai). We do not control that
-        site. Information you submit there is governed by the hiring partner’s privacy policy and terms, not
-        this one. We may learn that a click occurred (for measurement) without receiving your full application
-        package.
+        Qualified applicants may open a third-party application (for example, on jobs.micro1.ai). We do not
+        control that site. Information you submit there is governed by the hiring partner’s privacy policy and
+        terms, not this one. We may learn that you started or confirmed an application (for follow-up and
+        measurement) without receiving your full application package.
       </p>
 
       <h2 className="font-serif text-[24px] font-medium text-ink">Sharing</h2>
       <p>
-        We may share limited data with service providers who help us host the Site (such as Cloudflare), run
-        analytics or ads (such as Google Analytics, Microsoft Clarity, and Meta), or operate our business—under
-        appropriate confidentiality obligations. We may also disclose information if required by law or to
-        protect rights and safety. We do not sell your personal information for money.
+        We may share limited data with service providers who help us host the Site and store form records
+        (Cloudflare, including D1), send follow-up email once a provider is connected, run analytics or ads
+        (such as Google Analytics, Microsoft Clarity, and Meta), or operate our business—under appropriate confidentiality
+        obligations. We may also disclose information if required by law or to protect rights and safety. We
+        do not sell your personal information for money.
       </p>
 
       <h2 className="font-serif text-[24px] font-medium text-ink">Retention &amp; security</h2>
