@@ -2,7 +2,7 @@ import { CORS_HEADERS, json, secretMatches } from "../lib.js";
 
 const SQL = `SELECT id, timestamp, first_name, email, phone, licensed, bedside, state, desktop, consent,
   utm_source, utm_medium, utm_campaign, utm_content, utm_term, status, applied_token, email_status,
-  email1_due, email2_due, email3_due, stopped
+  email1_due, email2_due, email3_due, stopped, time_now
   FROM leads ORDER BY id DESC LIMIT 500`;
 
 export async function onRequestOptions() {

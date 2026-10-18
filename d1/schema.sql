@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS leads (
   email1_due TEXT NOT NULL DEFAULT '',
   email2_due TEXT NOT NULL DEFAULT '',
   email3_due TEXT NOT NULL DEFAULT '',
-  stopped TEXT NOT NULL DEFAULT ''
+  stopped TEXT NOT NULL DEFAULT '',
+  time_now TEXT NOT NULL DEFAULT ''
 );
 
 CREATE INDEX IF NOT EXISTS leads_status ON leads (status);

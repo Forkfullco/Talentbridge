@@ -102,5 +102,6 @@ export async function onRequestPost(context) {
     outcome,
     emailSent,
     stored: true,
+    token,
   });
 }

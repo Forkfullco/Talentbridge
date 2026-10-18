@@ -18,6 +18,7 @@ export function ApplyForm() {
   const [errors, setErrors] = useState<Errors>({});
   const [submitted, setSubmitted] = useState<ApplyOutcome | null>(null);
   const [emailSent, setEmailSent] = useState(false);
+  const [leadToken, setLeadToken] = useState("");
   const [sending, setSending] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const firstRef = useRef<HTMLInputElement>(null);
@@ -46,6 +47,7 @@ export function ApplyForm() {
         setSubmitError(null);
         setSending(false);
         setEmailSent(false);
+        setLeadToken("");
       }, 250);
       return () => window.clearTimeout(t);
     }
@@ -84,7 +86,7 @@ export function ApplyForm() {
         }),
       });
       const data = (await res.json().catch(() => null)) as
-        | { ok?: boolean; outcome?: ApplyOutcome; emailSent?: boolean; error?: string }
+        | { ok?: boolean; outcome?: ApplyOutcome; emailSent?: boolean; token?: string; error?: string }
         | null;
       if (!res.ok || !data?.ok) {
         setSubmitError(data?.error || "Could not save your application. Please try again.");
@@ -94,6 +96,7 @@ export function ApplyForm() {
       markApplied();
       trackLead();
       setEmailSent(Boolean(data.emailSent));
+      setLeadToken(data.token || "");
       setSubmitted(outcome);
     } catch {
       setSubmitError("Could not save your application. Please try again.");
@@ -152,7 +155,7 @@ export function ApplyForm() {
             </div>
 
             {submitted ? (
-              <Success firstName={form.firstName} outcome={submitted} emailSent={emailSent} />
+              <Success firstName={form.firstName} outcome={submitted} emailSent={emailSent} token={leadToken} />
             ) : (
               <form noValidate onSubmit={onSubmit} className="flex min-h-0 flex-1 flex-col">
                 <div className="flex-1 space-y-7 overflow-y-auto px-6 py-6 sm:px-8">
@@ -288,9 +291,33 @@ export function ApplyForm() {
   );
 }
 
-function Success({ firstName, outcome, emailSent }: { firstName: string; outcome: ApplyOutcome; emailSent: boolean }) {
+function Success({
+  firstName,
+  outcome,
+  emailSent,
+  token,
+}: {
+  firstName: string;
+  outcome: ApplyOutcome;
+  emailSent: boolean;
+  token: string;
+}) {
   const name = firstName.trim() || "there";
   const [readyNow, setReadyNow] = useState<boolean | null>(null);
+  const saveQueue = useRef(Promise.resolve());
+
+  const chooseTime = (answer: boolean) => {
+    setReadyNow(answer);
+    if (!token) return;
+    const value = answer ? "yes" : "no";
+    saveQueue.current = saveQueue.current.then(async () => {
+      await fetch("/api/time-now", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, answer: value }),
+      }).catch(() => undefined);
+    });
+  };
 
   if (outcome === "not_qualified") {
     return (
@@ -314,10 +341,10 @@ function Success({ firstName, outcome, emailSent }: { firstName: string; outcome
       <p className="text-[17px] leading-relaxed text-soft">Quick interview.</p>
       <p className="mt-5 text-[17px] font-medium leading-relaxed text-ink">Do you have time now?</p>
       <div className="mt-3 flex gap-2.5">
-        <ChoiceButton selected={readyNow === true} onClick={() => setReadyNow(true)}>
+        <ChoiceButton selected={readyNow === true} onClick={() => chooseTime(true)}>
           Yes
         </ChoiceButton>
-        <ChoiceButton selected={readyNow === false} onClick={() => setReadyNow(false)}>
+        <ChoiceButton selected={readyNow === false} onClick={() => chooseTime(false)}>
           No
         </ChoiceButton>
       </div>

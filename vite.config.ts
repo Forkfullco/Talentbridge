@@ -33,7 +33,7 @@ function applyDevApi(): Plugin {
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         const url = req.url?.split("?")[0] || "";
-        if (url !== "/api/apply" && url !== "/api/applied" && url !== "/api/contact") return next();
+        if (url !== "/api/apply" && url !== "/api/applied" && url !== "/api/contact" && url !== "/api/time-now") return next();
         if (req.method === "OPTIONS") {
           res.statusCode = 204;
           res.end();
@@ -97,7 +97,19 @@ function applyDevApi(): Plugin {
               send(res, 200, { ok: true, outcome: data.outcome || outcome, emailSent: Boolean(data.emailSent) });
               return;
             }
-            send(res, 200, { ok: true, outcome, emailSent: false });
+            send(res, 200, { ok: true, outcome, emailSent: false, token: "local-preview" });
+          } catch {
+            send(res, 400, { ok: false, error: "Invalid request" });
+          }
+          return;
+        }
+
+        if (url === "/api/time-now" && req.method === "POST") {
+          try {
+            const body = JSON.parse(await readBody(req)) as { token?: string; answer?: string };
+            if (!body.token) return send(res, 400, { ok: false, error: "Missing token" });
+            if (body.answer !== "yes" && body.answer !== "no") return send(res, 400, { ok: false, error: "Choose Yes or No." });
+            send(res, 200, { ok: true, time_now: body.answer });
           } catch {
             send(res, 400, { ok: false, error: "Invalid request" });
           }
