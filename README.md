@@ -38,7 +38,8 @@ Routes:
 - `GET|POST /api/applied` — set status `Applied` and stop the scheduled sequence (`?t=` or JSON `{ token }`)
 - `GET /api/leads?secret=` — HTML table; add `format=json` or `format=csv`
 - `POST /api/contact` — email the message to talent@talentbridgeremote.com (Reply-To is the visitor)
-- `POST /api/valuation` — email a business-data valuation to talent@ and a short range note to the visitor
+- `POST /api/valuation` — save the business-data valuation in D1 table `valuations` (not `leads`), then email talent@ and a short range note to the visitor
+- `GET /api/valuations?secret=` — HTML table of valuations; add `format=json` or `format=csv`. Same `APPLY_SECRET` as `/api/leads`
 - `/contact` — contact form
 - `/data` — business data landing
 - `/valuation` — free valuation questions

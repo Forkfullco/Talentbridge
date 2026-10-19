@@ -6,7 +6,7 @@ pages_build_output_dir = "dist"
 SITE_URL = "https://talentbridge-4pb.pages.dev"
 
 # Secrets (wrangler pages secret put NAME --project-name=talentbridge):
-#   APPLY_SECRET     required to open GET /api/leads
+#   APPLY_SECRET     required to open GET /api/leads and GET /api/valuations
 #   RESEND_API_KEY   sends from talent@talentbridgeremote.com
 
 [[d1_databases]]

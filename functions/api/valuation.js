@@ -29,10 +29,36 @@ export async function onRequestPost(context) {
 
   if (!name || !company) return json({ ok: false, error: "We need a name, a company and an email that works." }, 400);
   if (!validEmail(email)) return json({ ok: false, error: "We need a name, a company and an email that works." }, 400);
+  if (!env.DB) return json({ ok: false, error: "Could not save your valuation. Please try again." }, 500);
 
   const origin = new URL(request.url).origin;
   const code = crypto.randomUUID().replace(/-/g, "").slice(0, 8);
   const refLink = isRef ? `${origin}/valuation?ref=${code}` : null;
+  const answersJson = JSON.stringify(answers).slice(0, 20000);
+
+  try {
+    await env.DB.prepare(
+      `INSERT INTO valuations (
+        timestamp, name, company, email, phone, range_text, tier, is_ref, incoming_ref, ref_code, answers
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    )
+      .bind(
+        new Date().toISOString(),
+        name,
+        company,
+        email,
+        phone,
+        range,
+        tier,
+        isRef ? "yes" : "no",
+        incomingRef,
+        isRef ? code : "",
+        answersJson,
+      )
+      .run();
+  } catch {
+    return json({ ok: false, error: "Could not save your valuation. Please try again." }, 500);
+  }
 
   const summary = [
     `Name: ${name}`,
