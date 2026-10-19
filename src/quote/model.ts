@@ -37,6 +37,7 @@ export type Option = [string, string] | string;
 export const REFERRER = "I’m introducing a company";
 export const ROLES: Option[] = [
   ["Founder or CEO", "I make the final call"],
+  ["Former owner", "The business has closed or shut down"],
   ["Operations", "I own how work flows through the company"],
   ["Finance or strategy", "I own budgets, deals and the roadmap"],
   ["Engineering or data", "I own our systems and what’s in them"],

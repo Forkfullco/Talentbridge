@@ -19,7 +19,7 @@ export function DataPage() {
       <DataHeader />
       <main>
         <DataHero />
-        <Ticker phrases={["Earn $1M+", "Read-only access", "De-identified first", "You approve every deal"]} />
+        <Ticker phrases={["Earn $1M+", "Closed businesses too", "Read-only access", "De-identified first", "You approve every deal"]} />
         <WhyData />
         <DataTypes />
         <DataSteps />

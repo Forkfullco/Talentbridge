@@ -8,7 +8,7 @@ export function DataCta() {
           Find out what your data is <span className="italic">worth.</span>
         </h2>
         <p className="mx-auto mt-5 max-w-[520px] text-[17px] leading-[1.6] text-paper/75">
-          Companies can earn $1M+ from their data. Get a free, private estimate — no files, no calls and no commitment
+          Companies can earn $1M+ from their data, including businesses that have already closed. Get a free, private estimate — no files, no calls and no commitment
           until you decide.
         </p>
         <Link

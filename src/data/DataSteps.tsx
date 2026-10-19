@@ -1,5 +1,5 @@
 const STEPS = [
-  { title: "Tell us what you have", meta: "A few minutes", body: "Answer a handful of questions about your systems and history. You’ll see an estimated range before connecting anything." },
+  { title: "Tell us what you have", meta: "A few minutes", body: "Answer a handful of questions about your systems and history. Open or shut down, you’ll see an estimated range before connecting anything." },
   { title: "We clean and package it", meta: "A few days", body: "Read-only access, identifying details removed, and a sample buyers can review without seeing the rest." },
   { title: "Labs license it, you get paid", meta: "When you approve", body: "Vetted AI labs make offers. Nothing is sold without your sign-off, and payment goes straight to you." },
 ];

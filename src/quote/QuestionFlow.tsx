@@ -46,7 +46,7 @@ export function QuestionFlow({ answers: a, setAnswers, startAtEnd, onDone }: Pro
 
   const all: Step[] = [
     {
-      id: "role", group: "You", title: "First, what’s your seat at the table?", auto: true, done: () => !!a.role,
+      id: "role", group: "You", title: "First, what’s your seat at the table?", sub: "Open companies and closed ones. We also buy data from businesses that have shut down.", auto: true, done: () => !!a.role,
       body: <RadioCards options={ROLES} value={a.role} onPick={(v) => pickAndGo({ role: v })} />,
     },
     {

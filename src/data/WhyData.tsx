@@ -13,7 +13,8 @@ export function WhyData() {
           </h2>
           <p className="mt-5 text-[18px] leading-[1.6] text-soft md:mt-0 md:self-end">
             Today’s models still struggle with real, multi-step business tasks. To improve, labs need examples of how people
-            actually take a job from request to done — and those examples live inside private company systems.
+            actually take a job from request to done — and those examples live inside private company systems. We buy that
+            data from closed businesses too. A company that has shut down can still license what it left behind.
           </p>
         </div>
 
