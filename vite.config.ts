@@ -33,7 +33,7 @@ function applyDevApi(): Plugin {
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         const url = req.url?.split("?")[0] || "";
-        if (url !== "/api/apply" && url !== "/api/applied" && url !== "/api/contact" && url !== "/api/time-now") return next();
+        if (url !== "/api/apply" && url !== "/api/applied" && url !== "/api/contact" && url !== "/api/time-now" && url !== "/api/valuation") return next();
         if (req.method === "OPTIONS") {
           res.statusCode = 204;
           res.end();
@@ -42,6 +42,29 @@ function applyDevApi(): Plugin {
 
         const scriptUrl = process.env.APPS_SCRIPT_URL;
         const secret = process.env.APPLY_SECRET || "";
+
+        if (url === "/api/valuation" && req.method === "POST") {
+          try {
+            const body = JSON.parse(await readBody(req)) as {
+              contact?: { name?: string; company?: string; email?: string };
+              isRef?: boolean;
+            };
+            const name = String(body.contact?.name || "").trim();
+            const company = String(body.contact?.company || "").trim();
+            const email = String(body.contact?.email || "").trim();
+            if (!name || !company || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+              return send(res, 400, { ok: false, error: "We need a name, a company and an email that works." });
+            }
+            const code = Math.random().toString(36).slice(2, 10);
+            send(res, 200, {
+              ok: true,
+              refLink: body.isRef ? `http://127.0.0.1:18741/valuation?ref=${code}` : null,
+            });
+          } catch {
+            send(res, 400, { ok: false, error: "Invalid request" });
+          }
+          return;
+        }
 
         if (url === "/api/contact" && req.method === "POST") {
           try {

@@ -1,8 +1,8 @@
-const PHRASES = ["Fully remote", "Flexible hours", "$60–70/hr", "US-licensed RNs"];
+const DEFAULT = ["Fully remote", "Flexible hours", "$60–70/hr", "US-licensed RNs"];
 
 /** Marquee band, borrowed from the Grepped and Tracework sites. */
-export function Ticker() {
-  const items = [...PHRASES, ...PHRASES];
+export function Ticker({ phrases = DEFAULT }: { phrases?: string[] }) {
+  const items = [...phrases, ...phrases];
   return (
     <div aria-hidden className="overflow-hidden bg-lime py-4">
       <div className="ticker-track flex w-max items-center gap-8 font-serif text-[30px] font-medium italic leading-none tracking-[-0.01em] md:text-[44px]">

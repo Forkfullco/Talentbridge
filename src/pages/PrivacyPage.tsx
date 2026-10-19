@@ -44,6 +44,12 @@ export function PrivacyPage() {
           your name, email, and message so we can reply. The message is emailed to TalentBridge; we do not add it
           to the apply-lead database.
         </li>
+        <li>
+          <span className="font-medium text-ink">Data valuations.</span> If you request a business-data valuation
+          we collect your name, company, email, optional phone, and the answers you give about systems, size, and
+          history. We email that request to TalentBridge and send you the range you see on screen. It is not added
+          to the RN apply-lead database.
+        </li>
       </ul>
 
       <h2 className="font-serif text-[24px] font-medium text-ink">How we use information</h2>

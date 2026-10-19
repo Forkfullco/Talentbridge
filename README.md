@@ -1,6 +1,6 @@
 # TalentBridge
 
-Landing page for the remote RN / AI-training role. Apply opens a pre-qualification modal. Leads are stored in Cloudflare D1 (`talentbridge-leads`). Email reminders are scheduled on the row (`email_status = needs_provider`) and are not sent until a provider such as Resend or Brevo is connected.
+Landing page for the remote RN / AI-training role, plus a business-data page and a free valuation flow. Apply opens a pre-qualification modal. RN leads are stored in Cloudflare D1 (`talentbridge-leads`). Email reminders are scheduled on the row and sent through Resend. A valuation request emails talent@talentbridgeremote.com and the person who asked.
 
 ## Live
 
@@ -38,6 +38,9 @@ Routes:
 - `GET|POST /api/applied` — set status `Applied` and stop the scheduled sequence (`?t=` or JSON `{ token }`)
 - `GET /api/leads?secret=` — HTML table; add `format=json` or `format=csv`
 - `POST /api/contact` — email the message to talent@talentbridgeremote.com (Reply-To is the visitor)
+- `POST /api/valuation` — email a business-data valuation to talent@ and a short range note to the visitor
 - `/contact` — contact form
+- `/data` — business data landing
+- `/valuation` — free valuation questions
 
 Unqualified (RN = No) is stored as `Not qualified`. Bedside experience is stored and preferred, and a No there still gets status New and the qualified follow-up. Qualified applicants on a phone still get the application link by email.
