@@ -5,7 +5,7 @@ export function DataHeader() {
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-paper/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-[1080px] items-center justify-between px-5 md:px-8">
-        <Link to="/" aria-label="TalentBridge home">
+        <Link to="/data" aria-label="TalentBridge business data">
           <Logo />
         </Link>
         <Link

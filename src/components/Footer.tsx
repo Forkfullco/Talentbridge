@@ -6,7 +6,7 @@ export function Footer({ variant = "nurse" }: { variant?: "nurse" | "data" }) {
     <footer className={`border-t border-line ${variant === "nurse" ? "pb-28 md:pb-10" : "pb-10"}`}>
       <div className="mx-auto max-w-[1080px] px-5 pt-10 md:flex md:items-start md:justify-between md:gap-12 md:px-8">
         <div>
-          <Link to="/" aria-label="TalentBridge home">
+          <Link to={variant === "nurse" ? "/" : "/data"} aria-label={variant === "nurse" ? "TalentBridge home" : "TalentBridge business data"}>
             <Logo size={32} />
           </Link>
           <p className="mt-5 max-w-[620px] text-[15px] leading-[1.6] text-muted">
@@ -16,13 +16,9 @@ export function Footer({ variant = "nurse" }: { variant?: "nurse" | "data" }) {
           </p>
         </div>
         <nav aria-label="Footer" className="mt-6 flex flex-col gap-3 md:mt-1 md:items-end">
-          {variant === "nurse" ? (
+          {variant === "nurse" && (
             <Link to="/data" className="text-[15px] font-medium text-ink underline underline-offset-4 hover:text-soft">
               Business data
-            </Link>
-          ) : (
-            <Link to="/" className="text-[15px] font-medium text-ink underline underline-offset-4 hover:text-soft">
-              Remote RN roles
             </Link>
           )}
           <Link
