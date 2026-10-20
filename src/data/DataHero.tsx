@@ -5,20 +5,11 @@ export function DataHero() {
   return (
     <section>
       <div className="mx-auto max-w-[1080px] px-5 pb-12 pt-12 md:px-8 md:pb-16 md:pt-24">
-        <p className="font-mono text-[13px] text-muted">For owners of open and closed businesses</p>
-        <h1 className="mt-4 max-w-[900px] font-serif text-[42px] font-medium leading-[1.04] tracking-[-0.025em] md:text-[76px]">
-          Your company’s records are worth{" "}
-          <span className="whitespace-nowrap bg-lime px-1.5">real money</span> to <span className="italic">AI labs.</span>
+        <h1 className="max-w-[900px] font-serif text-[42px] font-medium leading-[1.04] tracking-[-0.025em] md:text-[76px]">
+          Monetize the data supply only you have
         </h1>
-        <p className="mt-6 max-w-[620px] text-[18px] leading-[1.55] text-soft md:text-[20px]">
-          The tickets, threads and ledgers your team creates every day show how real work gets done — exactly what AI models
-          can’t learn from the public internet. We help you price it and license it safely.
-        </p>
-        <p className="mt-5 text-[20px] font-medium md:text-[22px]">
-          Companies can earn <span className="bg-lime px-1.5 font-semibold">$1M+</span> from data they already have.
-        </p>
-        <p className="mt-4 max-w-[620px] text-[18px] leading-[1.55] text-soft md:text-[20px]">
-          We also buy data from closed businesses. If the company has shut down, you can still license the records.
+        <p className="mt-6 max-w-[720px] text-[22px] font-medium leading-[1.35] md:text-[28px]">
+          Your company’s data could be worth <span className="whitespace-nowrap bg-lime px-1.5">$20K–$5M.</span>
         </p>
         <Link
           to="/valuation"
