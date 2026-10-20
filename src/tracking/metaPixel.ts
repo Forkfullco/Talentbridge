@@ -2,8 +2,9 @@
  * META PIXEL + GA helpers
  * ------------------------------------------------------------------
  * Base snippets live in index.html <head> (gtag + fbq init / PageView /
- * noscript) so they load before React. trackLead() fires only after a
- * successful apply-form save, never on the Apply click.
+ * noscript) so they load before React. trackLead() fires after a
+ * successful RN apply save, and after a successful business valuation
+ * save. It does not fire on Apply clicks or valuation Next/Back.
  */
 export const PIXEL_ID = "1685542169905756";
 export const GA_MEASUREMENT_ID = "G-CW1HP8BX8B";

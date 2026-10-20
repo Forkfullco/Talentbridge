@@ -181,42 +181,36 @@ export function QuestionFlow({ answers: a, setAnswers, startAtEnd, onDone }: Pro
             exit={{ opacity: 0, x: -12 }}
             transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
           >
-            <div className="mb-6 flex items-start gap-3 md:mb-8 md:gap-5">
-              <button
-                type="button"
-                onClick={back}
-                aria-label="Back"
-                className={`mt-2 grid h-10 w-10 flex-none place-items-center rounded-full border border-qz-line text-qz-muted transition-colors duration-150 hover:border-qz-line-2 hover:text-qz-text ${
-                  p === 0 ? "invisible" : ""
-                }`}
-              >
-                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden>
-                  <path fill="none" stroke="currentColor" strokeWidth="2.2" d="m14.5 6-6 6 6 6" />
-                </svg>
-              </button>
-              <div>
-                <h2 ref={titleRef} tabIndex={-1} className="font-serif text-[30px] font-medium leading-[1.12] tracking-[-0.02em] outline-none md:text-[44px]">
-                  {step.title}
-                </h2>
-                {step.sub && <p className="mt-2 text-[16px] text-qz-muted">{step.sub}</p>}
-              </div>
+            <div className="mb-6 md:mb-8">
+              <h2 ref={titleRef} tabIndex={-1} className="font-serif text-[30px] font-medium leading-[1.12] tracking-[-0.02em] outline-none md:text-[44px]">
+                {step.title}
+              </h2>
+              {step.sub && <p className="mt-2 text-[16px] text-qz-muted">{step.sub}</p>}
             </div>
 
             {step.body}
 
-            {!step.auto && (
-              <div className="mt-8 flex items-center justify-end gap-5">
-                <span className="font-mono text-[13px] text-qz-muted">{step.hint}</span>
+            <div className="mt-8 flex items-center justify-between gap-4">
+              <button
+                type="button"
+                onClick={back}
+                disabled={p === 0}
+                className="press inline-flex min-h-[52px] min-w-[120px] items-center justify-center rounded-full border border-qz-line px-6 text-[16px] font-medium text-qz-text hover:border-qz-line-2 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Back
+              </button>
+              <div className="flex items-center gap-5">
+                {step.hint && <span className="font-mono text-[13px] text-qz-muted">{step.hint}</span>}
                 <button
                   type="button"
                   onClick={() => goNext()}
                   disabled={!step.done()}
-                  className="press inline-flex min-w-[160px] items-center justify-center gap-3 rounded-full bg-qz-acc px-7 py-4 text-[16px] font-medium leading-none text-qz-bg hover:bg-qz-acc-2 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="press inline-flex min-h-[52px] min-w-[160px] items-center justify-center rounded-full bg-qz-acc px-7 text-[16px] font-medium leading-none text-qz-bg hover:bg-qz-acc-2 disabled:cursor-not-allowed disabled:opacity-40"
                 >
-                  Next →
+                  Next
                 </button>
               </div>
-            )}
+            </div>
           </motion.div>
         </AnimatePresence>
       </div>

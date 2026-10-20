@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent, type InputHTMLAttributes } from "react";
 import { estimate, fmt, type Answers } from "./model";
+import { trackLead } from "../tracking/metaPixel";
 
 export type Contact = { name: string; company: string; email: string; phone: string };
 
@@ -74,6 +75,7 @@ export function ContactForm({
         setError(data?.error || "Could not send your valuation. Please try again.");
         return;
       }
+      trackLead();
       onSubmit(c, data.refLink ?? null);
     } catch {
       setError("Could not send your valuation. Please try again.");
@@ -94,9 +96,6 @@ export function ContactForm({
             ? "Tell us who you are and which company you’re introducing. You’ll see the range and get a personal link to send the owner."
             : "Tell us where to send the full breakdown and we’ll show your range right away."}
         </p>
-        <button type="button" onClick={onBack} className="mt-8 text-[14px] text-qz-muted transition-colors duration-150 hover:text-qz-text">
-          ← Change my answers
-        </button>
       </div>
 
       <form onSubmit={submit} noValidate className="grid gap-4 rounded-2xl border border-qz-line bg-qz-card p-6 md:p-8">
@@ -111,13 +110,23 @@ export function ContactForm({
           </p>
         )}
 
-        <button
-          type="submit"
-          disabled={busy}
-          className="press mt-2 inline-flex w-full items-center justify-center rounded-full bg-qz-acc px-7 py-4 text-[16px] font-medium leading-none text-qz-bg hover:bg-qz-acc-2 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {busy ? "Pricing it…" : "Show my range"}
-        </button>
+        <div className="mt-2 flex items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={onBack}
+            disabled={busy}
+            className="press inline-flex min-h-[52px] min-w-[120px] items-center justify-center rounded-full border border-qz-line px-6 text-[16px] font-medium text-qz-text hover:border-qz-line-2 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Back
+          </button>
+          <button
+            type="submit"
+            disabled={busy}
+            className="press inline-flex min-h-[52px] min-w-[160px] items-center justify-center rounded-full bg-qz-acc px-7 text-[16px] font-medium leading-none text-qz-bg hover:bg-qz-acc-2 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {busy ? "Pricing it…" : "Next"}
+          </button>
+        </div>
         <p className="text-center text-[13px] text-qz-muted">Used for your valuation only. No marketing lists.</p>
       </form>
     </section>
